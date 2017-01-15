@@ -1,0 +1,9 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:state_pressed="true" android:drawable="@drawable/ic_location_found_bg" />
+<!--   눌린 후 버튼이미지 파일명을 써준다.-->
+<!-- pressed -->  
+
+<item android:drawable="@drawable/ic_location_found" /> 
+<!--  눌리기 전 버튼이미지 파일명을 써준다..-->
+<!-- default -->
+</selector>

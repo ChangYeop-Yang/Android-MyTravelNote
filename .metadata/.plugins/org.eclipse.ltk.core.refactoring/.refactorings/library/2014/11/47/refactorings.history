@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;library/libs/android-support-v4.jar&apos; to &apos;android-support-v4_copy.jar&apos;" description="Rename resource &apos;android-support-v4.jar&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="libs/android-support-v4.jar" name="android-support-v4_copy.jar" stamp="1416391724721" updateReferences="true"/>
+</session>

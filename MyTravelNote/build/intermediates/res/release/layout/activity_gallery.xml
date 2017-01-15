@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+	
+    <!-- 확대 이미지를 출력하는 이미지 뷰 -->
+    <ImageView
+        android:id="@+id/expendimageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:contentDescription="@string/gallety_expandimage" />
+</LinearLayout><!-- From: file:/C:/Users/Mari/Project/MyTravelNote/res/layout/activity_gallery.xml -->

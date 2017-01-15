@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto">
+    
+    <!-- ActionBar 공유하기 아이콘 -->
+    <item 
+        android:id="@+id/share_icon"
+        android:icon="@drawable/ic_share"
+        android:orderInCategory="1"
+        android:title="@string/gallery_back"
+        yourapp:showAsAction="always">
+        <menu>
+    	    <!-- 페이스뷱 -->
+    	    <item android:id="@+id/facebook"
+    	        yourapp:showAsAction="ifRoom|withText"
+    	        android:title="@string/action_facebook"
+    	        android:icon="@drawable/ic_facebook"/>
+    	    <!-- 카카오톡 -->
+    	    <item android:id="@+id/kakaotalk"
+    	        yourapp:showAsAction="ifRoom|withText"
+    	        android:title="@string/action_kakaotalk"
+    	        android:icon="@drawable/ic_kakaotalk"/>
+    	</menu>    
+    </item>
+    <!-- ActionBar 저장하기 아이콘 -->
+    <item 
+        android:id="@+id/save_icon"
+        android:icon="@drawable/ic_save"
+        android:orderInCategory="2"
+        android:title="@string/gallery_back"
+        yourapp:showAsAction="always"/>
+</menu>

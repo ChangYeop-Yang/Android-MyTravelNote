@@ -1,0 +1,2 @@
+int string com_kakao_alert_appKey 0x7f020000
+int string com_kakao_alert_install_kakaotalk 0x7f020001

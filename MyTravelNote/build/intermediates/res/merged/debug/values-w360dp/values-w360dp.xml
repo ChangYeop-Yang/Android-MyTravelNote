@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/C:/Users/Mari/Documents/Project/MyTravelNote/build/intermediates/exploded-aar/Project/appcompat_v7/unspecified/res/values-w360dp/values-w360dp.xml -->
+    <eat-comment/>
+    <integer name="abc_max_action_buttons">3</integer>
+</resources>

@@ -1,0 +1,76 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/information_liatview_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+    <!-- 전체 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/inforamtion_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/image_border"
+        android:orientation="vertical" >
+        <!-- 상호명 레이아웃 -->
+
+        <RelativeLayout
+            android:id="@+id/information_name_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <!-- 상호명 -->
+            <TextView
+                android:id="@+id/information_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:textColor="#000000"
+                android:text="@string/information_name"
+                android:textStyle="bold" />
+            <!-- 남은 거리 -->
+            <TextView
+                android:id="@+id/information_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="5dp"
+                android:textColor="#0100FF"
+                android:textStyle="bold"
+                android:text="@string/information_distance" />
+        </RelativeLayout>
+        <!-- 주소 및 버튼 관련 레이아웃 -->
+        <RelativeLayout
+            android:id="@+id/information_address_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <!-- 주소 버튼 -->
+            <Button
+                android:id="@+id/information_point_but"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/inforamtinon_point_but" />
+            <!-- 전화 버트 -->
+            <Button
+                android:id="@+id/information_phone_but"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/information_point_but"
+                android:background="@drawable/inforamtinon_call_but" />
+            <!-- 주소 -->
+            <TextView
+                android:id="@+id/information_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/information_phone_but"
+                android:layout_alignBottom="@+id/information_phone_but"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="5dp"
+                android:textColor="#22741C"
+                android:text="@string/information_address" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout><!-- From: file:/C:/Users/Mari/Documents/Project/MyTravelNote/res/layout/activity_inforamtion_listview.xml -->

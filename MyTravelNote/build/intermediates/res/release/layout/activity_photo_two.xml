@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_container"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff" >
+
+    <RelativeLayout
+        android:id="@+id/title_RelativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_view"
+        android:layout_toLeftOf="@+id/Total2_vertical_view"
+        android:layout_toRightOf="@+id/Total1_vertical_view"
+        android:background="#ECF3E5" >
+
+        <EditText
+            android:id="@+id/NameEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5pt"
+            android:layout_marginTop="3pt"
+            android:hint="@string/photo_name"
+            android:inputType="text"
+            android:textSize="5pt"
+            android:textStyle="bold" >
+        </EditText>
+
+        <View
+            android:id="@+id/botton_view"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:layout_below="@+id/NameEditText"
+            android:background="#30AD11" />
+
+        <Button
+            android:id="@+id/check_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_check" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/Total1_vertical_view"
+        android:layout_width="2dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="#30AD11" />
+
+    <View
+        android:id="@+id/Total2_vertical_view"
+        android:layout_width="2dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="#30AD11" />
+
+    <View
+        android:id="@+id/Total_botton_view"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="#30AD11" />
+
+    <View
+        android:id="@+id/top_view"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="#30AD11" />
+
+    <View
+        android:id="@+id/photo_view"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:layout_above="@+id/report_title_RelativeLayout"
+        android:background="#30AD11" />
+
+    <RelativeLayout
+        android:id="@+id/report_title_RelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/report_point_RelativeLayout"
+        android:layout_toLeftOf="@+id/Total2_vertical_view"
+        android:layout_toRightOf="@+id/Total1_vertical_view"
+        android:background="#ECF3E5" >
+
+        <TextView
+            android:id="@+id/report_date_textview1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4pt"
+            android:padding="3pt"
+            android:text="@string/photo_report_date" />
+
+        <TextView
+            android:id="@+id/report_date_textvie2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7pt"
+            android:layout_marginTop="7pt"
+            android:layout_toRightOf="@+id/report_date_textview1"
+            android:hint="@string/photo_seting"
+            android:textSize="6pt" />
+
+        <View
+            android:id="@+id/report_title_view"
+            android:layout_width="wrap_content"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/report_date_textview1"
+            android:background="#30AD11" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/report_point_RelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/report_coment_RelativeLayout"
+        android:layout_toLeftOf="@+id/Total2_vertical_view"
+        android:layout_toRightOf="@+id/Total1_vertical_view" >
+
+        <TextView
+            android:id="@+id/report_point_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4pt"
+            android:padding="3pt"
+            android:text="@string/photo_report_point" />
+
+        <TextView
+            android:id="@+id/report_point_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7pt"
+            android:layout_marginTop="7pt"
+            android:layout_toRightOf="@+id/report_point_textview"
+            android:hint="@string/photo_seting"
+            android:textSize="6pt" >
+        </TextView>
+
+        <View
+            android:id="@+id/report_point_view"
+            android:layout_width="wrap_content"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/report_point_textview"
+            android:background="#30AD11" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/report_coment_RelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tag_RelativeLayout"
+        android:layout_toLeftOf="@+id/Total2_vertical_view"
+        android:layout_toRightOf="@+id/Total1_vertical_view"
+        android:background="#ECF3E5" >
+
+        <TextView
+            android:id="@+id/report_coment_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4pt"
+            android:padding="3pt"
+            android:text="@string/photo_report_coment" />
+
+        <EditText
+            android:id="@+id/report_coment_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5pt"
+            android:layout_marginTop="5pt"
+            android:layout_toRightOf="@+id/report_coment_textview"
+            android:hint="@string/photo_report"
+            android:inputType="text"
+            android:textSize="6pt" >
+        </EditText>
+
+        <View
+            android:id="@+id/report_coment_view"
+            android:layout_width="wrap_content"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/report_coment_textview"
+            android:background="#30AD11" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/tag_RelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/report_rating_LinearLayout"
+        android:layout_toLeftOf="@+id/Total2_vertical_view"
+        android:layout_toRightOf="@+id/Total1_vertical_view" >
+
+        <TextView
+            android:id="@+id/tag_coment_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4pt"
+            android:padding="3pt"
+            android:text="@string/photo_tag" />
+
+        <EditText
+            android:id="@+id/Ta_coment_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5pt"
+            android:layout_marginTop="5pt"
+            android:layout_toRightOf="@+id/tag_coment_textview"
+            android:hint="@string/photo_report"
+            android:inputType="text"
+            android:textSize="6pt" >
+        </EditText>
+
+        <View
+            android:id="@+id/tag_view"
+            android:layout_width="wrap_content"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/tag_coment_textview"
+            android:background="#30AD11" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/report_rating_LinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Total_botton_view"
+        android:layout_toLeftOf="@+id/Total2_vertical_view"
+        android:layout_toRightOf="@+id/Total1_vertical_view"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <!-- 현제지도 화면과 사진화면이 저장되는 레이아웃 -->
+
+    <LinearLayout
+        android:id="@+id/multi_media_LinearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/photo_view"
+        android:layout_alignLeft="@+id/title_RelativeLayout"
+        android:layout_alignRight="@+id/title_RelativeLayout"
+        android:layout_below="@+id/title_RelativeLayout"
+        android:baselineAligned="false" >
+        <!-- 사진이 들어가는 레이아웃 -->
+        <LinearLayout
+            android:id="@+id/photo_image_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+            <!-- 1번 화면 사진이 들어가는 레이아웃 -->
+            <ImageView
+                android:id="@+id/photo_image_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/image_border"
+                android:contentDescription="@string/photo_image"
+                android:scaleType="fitXY"
+                tools:ignore="NestedWeights" />
+            <!-- 2번 화면 사진이 들어가는 레이아웃 -->
+            <ImageView
+                android:id="@+id/photo_image_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/image_border"
+                android:contentDescription="@string/photo_image"
+                android:scaleType="fitXY" />
+        </LinearLayout>
+        <!-- 현제위치 지도가 들어가는 레이아웃 -->
+        <LinearLayout
+            android:id="@+id/photo_point_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+            <!-- GPS Image Veiw -->
+            <ImageView
+                android:id="@+id/gps_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/image_border"
+                android:contentDescription="@string/photo_gpsimage"
+                android:scaleType="fitXY" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout><!-- From: file:/C:/Users/Mari/Project/MyTravelNote/res/layout/activity_photo_two.xml -->

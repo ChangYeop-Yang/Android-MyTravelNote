@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/comment_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+	<!-- 현제 접속 된 지역 주소 표시해주는 안내문 -->
+    <TextView
+        android:id="@+id/comment_information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#a1deff"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:text="@string/comment_information"
+        android:textStyle="bold" />
+	<!-- 실시간 댓글 ListView 관련 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/comment_listview_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/comment_write_layout"
+        android:layout_below="@+id/comment_information"
+        android:orientation="vertical">
+        <ListView
+            android:id="@+id/comment_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </ListView>
+    </LinearLayout>
+	<!-- 댓글을 작성 관련 레이아웃 -->
+    <RelativeLayout
+        android:id="@+id/comment_write_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true" >
+		<!-- 댓글을 입력 받는 EditText 문 -->
+        <EditText
+            android:id="@+id/comment_write_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:layout_toLeftOf="@+id/comment_send_but"
+            android:hint="@string/comment_write"
+            android:maxLines="15"
+            android:textSize="12sp" />
+		<!-- 전송 버튼 -->
+        <Button
+            android:id="@+id/comment_send_but"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/comment_refresh_but"
+            android:text="@string/comment_write_but" />
+		<!-- 새로 고침 버튼 -->
+        <Button
+            android:id="@+id/comment_refresh_but"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/comment_read_but" />
+    </RelativeLayout>
+</RelativeLayout><!-- From: file:/C:/Users/Mari/Project/MyTravelNote/res/layout/activity_comment.xml -->

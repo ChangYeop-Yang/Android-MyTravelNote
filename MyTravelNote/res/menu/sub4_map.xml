@@ -1,0 +1,79 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
+    <!-- 맵전용 아이콘 모음 -->
+    <item
+        android:id="@+id/map_icon_factory"
+        android:title="@string/map_mapfactory"
+        android:orderInCategory="2"
+        android:icon="@drawable/ic_overflow"
+        yourapp:showAsAction="always">
+    <menu>
+    <!-- ActionBar 위치찾기 아이콘 -->
+   	<item 
+   	     android:id="@+id/route"
+    	 android:icon="@drawable/ic_route"
+    	 android:orderInCategory="1"
+         android:title="@string/map_point"
+    	 yourapp:showAsAction="ifRoom|withText"/>
+    <!-- ActionBar ZoomIn 아이콘 -->
+    <item
+        android:id="@+id/zoom_in"
+        android:icon="@drawable/ic_new"
+        android:orderInCategory="2"
+        yourapp:showAsAction="ifRoom|withText"
+        android:title="@string/map_zoomin" />
+    <!-- ActionBar ZoomOut 아이콘 -->
+    <item
+        android:id="@+id/zoom_out"
+        android:icon="@drawable/ic_notnew"
+        android:orderInCategory="3"
+        yourapp:showAsAction="ifRoom|withText"
+        android:title="@string/map_zoomout" /> 
+    </menu>       
+    </item>
+    <!-- 여행 관련 주제 아이콘 모음 -->
+    <item
+        android:id="@+id/travel_icon_factory"
+        android:icon="@drawable/ic_bag"
+        android:orderInCategory="1"
+        android:title="@string/map_travel"
+        yourapp:showAsAction="always">
+    <menu>
+        <!-- 주변 관광지 -->
+        <item 
+            android:id="@+id/travel_trip"
+            android:title="@string/map_trip"
+            android:orderInCategory="1"
+            android:icon="@drawable/ic_travel"
+            yourapp:showAsAction="ifRoom|withText"/>
+        <!-- 주변 관광지 -->
+        <item 
+            android:id="@+id/travel_festival"
+            android:title="@string/map_festival"
+            android:orderInCategory="2"
+            android:icon="@drawable/ic_travel"
+            yourapp:showAsAction="ifRoom|withText"/>
+        <!-- 해수욕장 -->
+        <item 
+            android:id="@+id/travel_beach"
+            android:title="@string/map_beach"
+            android:orderInCategory="3"
+            android:icon="@drawable/ic_beach"
+            yourapp:showAsAction="ifRoom|withText"/>
+        <!-- 수목원 & 자연휴양림 -->
+        <item 
+            android:id="@+id/travel_tree"
+            android:title="@string/map_tree"
+            android:orderInCategory="4"
+            android:icon="@drawable/ic_tree"
+            yourapp:showAsAction="ifRoom|withText"/>
+        <!-- 온천 -->
+        <item 
+            android:id="@+id/travel_beath"
+            android:title="@string/map_beath"
+            android:orderInCategory="5"
+            android:icon="@drawable/ic_beath"
+            yourapp:showAsAction="ifRoom|withText"/>
+    </menu>
+    </item>
+</menu>

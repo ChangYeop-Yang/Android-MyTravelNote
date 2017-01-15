@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
+
+    <item 
+        android:id="@+id/action_camara"
+        android:title="@string/action_camara"
+        android:icon="@drawable/ic_camera"
+        android:orderInCategory="1"
+        yourapp:showAsAction="always"/>
+    <item 
+        android:id="@+id/action_notebook"
+        android:title="@string/action_notebook"
+        android:icon="@drawable/ic_notebook"
+        android:orderInCategory="2"
+        yourapp:showAsAction="always"/>
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:icon="@drawable/ic_sessting"
+        android:orderInCategory="3"
+        yourapp:showAsAction="always"/>
+</menu>

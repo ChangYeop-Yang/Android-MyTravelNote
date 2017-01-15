@@ -1,0 +1,60 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_ListView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:id="@+id/main_LinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+		<!-- TextView 관련 레이아웃 -->
+        <LinearLayout
+            android:id="@+id/main_TextView_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:orientation="vertical" >
+            <!-- 이름 -->
+            <TextView
+                android:id="@+id/main_Name_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:text="@string/main_name" />
+            <!-- 남은 거리 -->
+            <TextView
+                android:id="@+id/main_destiation_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#0100FF"
+                android:text="@string/main_destiation" />
+        </LinearLayout>
+        
+        <!-- Button 관련 레이아웃 -->
+        <LinearLayout
+            android:id="@+id/main_Button_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp" >
+            <!-- 전화버튼 -->
+            <Button
+                android:id="@+id/main_Button_Call"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/inforamtinon_call_but" />
+            <!-- 위치버튼 -->
+            <Button
+                android:id="@+id/main_Button_Location"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/inforamtinon_point_but" />
+
+        </LinearLayout>
+    </LinearLayout>
+    
+</LinearLayout><!-- From: file:/C:/Users/Mari/Documents/Project/MyTravelNote/res/layout/activity_main_listview.xml -->

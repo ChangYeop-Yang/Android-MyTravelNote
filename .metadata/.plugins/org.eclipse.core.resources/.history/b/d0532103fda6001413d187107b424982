@@ -1,0 +1,691 @@
+package kr.example.mytravelnote;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import kr.example.mytravelnote.apikey.API_KEY;
+import kr.example.mytravelnote.common.BackPressClose;
+import kr.example.mytravelnote.surroundings.surroundings;
+import kr.net.mytravelnote.R;
+
+import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.StrictMode;
+import android.preference.PreferenceManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MainActivity extends ActionBarActivity {
+	
+	/* 네비게이션 드로어 관련 클래스 */
+	private class DrawerItemClickListener implements ListView.OnItemClickListener {
+
+		@Override
+		public void onItemClick(AdapterView<?> adapter, View view, int position, long id) 
+		{
+			/* TODO Auto-generated method stub */
+			switch(position) {
+				case (0) : 
+				{ 
+					/* 관광정보 화면으로 이동 */
+					surroundings.Vector_remove(true); /* 초기 데이터 삭제 */
+					Toast.makeText(getApplicationContext(), "행사정보", Toast.LENGTH_SHORT).show();
+	    			Intent intent = new Intent(MainActivity.this,SubActivity11_fsetival.class);
+	    			startActivity(intent);
+	    			break; 
+				}
+				case (1) : 
+				{ 
+					/* 관광정보 화면으로 이동 */
+					Toast.makeText(getApplicationContext(), "관광정보", Toast.LENGTH_SHORT).show();
+	    			Intent intent = new Intent(MainActivity.this,SubActivity8_tourlist.class);
+	    			intent.putExtra("MapX", MapX); /* 위도 값 전달 */
+	    			intent.putExtra("MapY", MapY); /* 경도 값 전달 */
+	    			startActivity(intent);
+					break; 
+				}
+				case (2) : 
+				{ 
+					/* 주변정보 화면으로 이동 */
+					Toast.makeText(getApplicationContext(), "주변정보", Toast.LENGTH_SHORT).show();
+	    			Intent intent = new Intent(MainActivity.this,SubActivity7_information.class);
+	    			intent.putExtra("MapX", MapX); /* 위도 값 전달 */
+	    			intent.putExtra("MapY", MapY); /* 경도 값 전달 */
+	    			startActivity(intent);
+					break; 
+				}
+				case (3) : 
+				{  
+					/* 나의위치 화면으로 이동 */
+					Toast.makeText(getApplicationContext(), "나의위치", Toast.LENGTH_SHORT).show();
+	    			Intent intent = new Intent(MainActivity.this,SubActivity4_map.class);
+	    			intent.putExtra("Select_Mode", "Main_Map"); /* 주변정보와 혼동이 생기지 않도록 해주는 인텐드 값 전달 */
+	    			intent.putExtra("MapX", MapX); /* 위도 값 전달 */
+	    			intent.putExtra("MapY", MapY); /* 경도 값 전달 */
+	    			startActivity(intent);
+					break; 
+				}
+				case (4) : 
+				{  
+					/* 추천하기 화면으로 이동 */
+					Toast.makeText(getApplicationContext(), "추천하기", Toast.LENGTH_SHORT).show();
+	    			Intent intent = new Intent(MainActivity.this,SubActivity13_comment.class);
+	    			intent.putExtra("MapX", MapX); /* 위도 값 전달 */
+	    			intent.putExtra("MapY", MapY); /* 경도 값 전달 */
+	    			startActivity(intent);
+					break; 
+				}
+				/* Application 종료 */
+				case (5) : { System.exit(0); break; } }
+			/* */
+			mDrawerLayout.closeDrawer(lvNavList);
+		}
+	}
+
+	/* Navigation Drawer 관련 변수 */
+	private String[] navItems = {"행사정보", "관광정보", "주변정보", "나의위치", "추천하기", "종료하기"}; /* 메뉴명 저장 변수 */
+	private ListView lvNavList;
+	@SuppressWarnings("unused")
+	private FrameLayout flContainer;
+	
+	/* ActionBar Toggle 관련 변수 */
+	private ActionBarDrawerToggle mDrawerToggle;
+	private DrawerLayout mDrawerLayout;
+	
+	/* GPS 관련 함수 */
+	private boolean is = true;
+	private double MapX = 0.0; /* 위도 */
+	private double MapY = 0.0; /* 경도 */
+	
+	/* ListView 관련 변수 */
+	private ListView food_ListView; /* 음식점 관련 리스트뷰 객체 생성 */
+	private ListView lodging_ListView; /* 숙소 관련 리스트뷰 객체 생성 */
+	private ListView tourist_listview; /* 여행지 관련 리스트뷰 객체 생성 */
+	
+	/* TODO JSON 관련 변수 */
+	private static String Weather_icon = null; /* 날씨 아이콘 관련 변수 */
+	private static String Weather_tem = null; /* 온도 아이콘 관련 변수 */
+	private static String Weather_state = null; /* 현재 날씨 상태 */
+	
+	/* TODO Address 관련 데이터 저장 변수 구문 */
+	String Locality = null; /* 지역명 */
+	String AdminArea = null; /* 도/구/군 */
+	String Admin_Code = null; /* 특별시/광역시/도 매칭 된 코드가 저장되는 함수 */
+	
+	/* TODO XML 관련 변수 */
+	private ArrayList<String> TITLE = new ArrayList<String>(10); /* ArrayList 상호명 변수 */
+	private ArrayList<String> ADDRESS = new ArrayList<String>(10); /* ArrayList 주소 변수 */
+	private ArrayList<String> SigunguCode = new ArrayList<String>(10); /* ArrayList 지역 코드 변수 */
+	private ArrayList<String> SigunguName = new ArrayList<String>(10); /* ArrayList 지역 명 변수 */
+	
+	/* 약관 메시지 */
+	private final String message = "GPS기능이 탑재되었거나, Wi-Fi 기능이 탑재된 단말기 또는 Cell ID에 기반한 단말기 등을 비롯하여 위치정보수집기능이 주기적으로 이동통신 및 Wi-Fi 기지국에 대한 위치정보를 수집합니다. 이러한 정보는, 이용자의 현재 위치를 확인하고 서비스를 제공하는데 사용됩니다. 그 외 활용할 목적으로 서버에 수집, 전송, 또는 제 3자에게 제공하지 않습니다.";
+	
+	/* BackPressClose 객체 생성 */
+	private BackPressClose backPressclose;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sliding);
+        
+        /* NewtWork Threed 관련 구문 */
+        if(android.os.Build.VERSION.SDK_INT > 9) {
+        	StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        	StrictMode.setThreadPolicy(policy); }
+        
+        /* 설정 값을 가져오는 구문 */
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this); /* 설정 값을 가져오기 위하여 Preferences 객체 생성 */
+        String ActionBar_Name = null; /* 액션바 타이틀을 지정하기 위한 값을 저장하기 위한 스트링 변수 생성 */
+        boolean ActionBar_title = pref.getBoolean("useUserName", false); /* 설정 값에서 설정 된 사용자 이름 사용 구분 가져오는 구문 */
+        
+        /* 설정 값에서 설정 된 사용자 이름을 가져오는 구문 */
+        if(ActionBar_title == true) { ActionBar_Name = pref.getString("userName", "여행일기"); }
+        else if(ActionBar_title == false) { ActionBar_Name = "여행일기"; }
+        
+        /* 현제 Activity를 저장과 객체 생성 */
+        backPressclose = new BackPressClose(this);
+        
+        /* ListView */
+        food_ListView = (ListView)findViewById(R.id.food_place_listview); /* 움식점 리스트뷰 */
+        lodging_ListView = (ListView)findViewById(R.id.lodging_place_listview); /* 숙소 리스트뷰 */
+        tourist_listview = (ListView)findViewById(R.id.tour_listview);  /* 여행 리스트뷰 */
+        
+        /* Action Bar 관련 구문 */
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(ActionBar_Name); /* ActionBar Title TEXT 설정 */
+        actionBar.setSubtitle("여행일기 - 홈"); /* ActionBar 소제목 TEXT 설정 */
+        actionBar.setDisplayHomeAsUpEnabled(true); /* ActionBar 홈화면 아이콘 생성 설정 */
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#a1deff"))); /* ActionBar 색상 변경 */
+    	actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#a1deff")));
+        
+        /* Navigation Drawer 관련 객체 생성 */
+        lvNavList = (ListView)findViewById(R.id.lv_activity_main_nav_list);
+        flContainer = (FrameLayout)findViewById(R.id.fl_activity_main_container);
+        
+        /* Navigation Drawer 관련 구문 */
+        lvNavList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, navItems));
+        lvNavList.setBackgroundColor(Color.WHITE);
+        lvNavList.setOnItemClickListener(new DrawerItemClickListener());
+        
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.dl_activity_main_drawer);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open) 
+        {
+        	/* Navigation Drawer 닫았을 경우 호출 되는 함수 */
+        	public void onDrawerClosed(View view) { super.onDrawerClosed(view); }
+        	/* Navigation Drawer 열었을 경우 호출 되는 함수 */
+        	public void onDrawerOpened(View drawerView) { super.onDrawerOpened(drawerView); }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        
+        /* 사용자 위치 정보 제공 동의 구문 */
+        AlertDialog.Builder bulider = new AlertDialog.Builder(this); /* AlertDialog 객체 생성 */
+        bulider.setTitle("위치정보를 수집/이용/제공 동의").setMessage(message).setCancelable(false).setPositiveButton("동의", new DialogInterface.OnClickListener() 
+        {	
+			@Override /* TODO Auto-generated method stub */
+			public void onClick(DialogInterface dialog, int which) { GPS_request(); /* GPS 위도와 경도를 찾아주는 함수 */ }
+		}).setNegativeButton("취소", new DialogInterface.OnClickListener() 
+		{
+			@Override /* TODO Auto-generated method stub */
+			public void onClick(DialogInterface dialog, int which) { dialog.cancel(); System.exit(0); /* Application 종료 */ }
+		}).show();
+    }
+    
+    /* 뒤로가기 두 번 누를시 호출 되는 함수 */
+    @Override
+    public void onBackPressed() 
+    { backPressclose.Back_Close(); }
+    
+    /* TODO GPS 위도와 경도를 찾아주는 함수 */
+	private void GPS_request() {
+		// Acquire a reference to the system Location Manager
+		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+		// Define a listener that responds to location updates
+		LocationListener locationListener = new LocationListener() {
+			
+			/* GPS의 좌표가 바뀔 경우 호출 되는 함수 */
+		    public void onLocationChanged(Location location) 
+		    {
+		      // Called when a new location is found by the network location provider.
+		    	double Latitude = location.getLatitude(); /* 위도 */
+		    	double Longitude= location.getLongitude(); /* 경도 */
+		    	MapX = Latitude; /* 전역 변수 저장 - 위도 */
+		    	MapY = Longitude; /* 전역 변수 저장 - 경도 */
+		    	if(is == true) { new Network_execcute().execute(); }
+		   }
+		    
+		    public void onStatusChanged(String provider, int status, Bundle extras) {}
+		    public void onProviderEnabled(String provider) {}
+		    public void onProviderDisabled(String provider) {}
+		  };
+
+		// Register the listener with the Location Manager to receive location updates
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener); }
+    
+    protected void onPostCreate(Bundle savedInstanceState)
+    {
+    	super.onPostCreate(savedInstanceState);
+    	mDrawerToggle.syncState();
+    }
+    
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+    	super.onConfigurationChanged(newConfig);
+    	mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+    	
+    	/* Action Bar Toggle 관련 구문 */
+    	if(mDrawerToggle.onOptionsItemSelected(item)) { return true; }
+        
+    	/* Action Bar 관련 구문 */
+    	switch (item.getItemId()) {
+    		case(R.id.action_settings): 
+    		{ 
+    			Toast.makeText(this, "설정", Toast.LENGTH_SHORT).show(); 
+    			Intent intent = new Intent(MainActivity.this,SubActivity3_setting.class);
+    			startActivity(intent);
+    			return true; 
+    		} // 설정화면 이동
+    		case(R.id.action_notebook) : 
+    		{ 
+    			Toast.makeText(this, "공책", Toast.LENGTH_SHORT).show();
+    			Intent intent = new Intent(MainActivity.this,SubActivity2_notebook.class);
+    			startActivity(intent);
+    			return true; 
+    		} // 공책화면 이동
+    		case(R.id.action_camara) : 
+    		{ 
+    			Toast.makeText(this, "촬영", Toast.LENGTH_SHORT).show(); 
+    			Intent intent = new Intent(MainActivity.this,SubActivity_photo.class);
+    			intent.putExtra("MapX", MapX); /* 위도 값 전달 */
+    			intent.putExtra("MapY", MapY); /* 경도 값 전달 */
+    			startActivity(intent);
+    			return true; 
+    		} // 촬영화면 이동
+    		default : { return super.onOptionsItemSelected(item); } } 
+    	}
+    
+    /* Network AsyncTask 클래스 */
+	private class Network_execcute extends AsyncTask<Void, Void, Void>
+	{
+		/* ProgressDialog */
+		private ProgressDialog Dialog;
+		
+		@Override /* 프로세스가 실행되기 전에 실행 되는 부분 - 초기 설정 부분 */
+		protected void onPreExecute() 
+		{
+			/* Dialog 설정 구문 */
+			Dialog = new ProgressDialog(MainActivity.this);
+			Dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); /* 원형 프로그래스 다이얼 로그 스타일로 설정 */
+			Dialog.setMessage("잠시만 기다려 주세요.");
+			Dialog.setCancelable(false);
+			Dialog.show();
+			super.onPreExecute();
+		}
+		
+		@Override /* AsyncTask 실행 부분 */
+		protected Void doInBackground(Void... params) 
+		{
+				try 
+				{
+					/* StringBuffer 관련 구문 */
+					StringBuffer weather = new StringBuffer("http://api.openweathermap.org/data/2.5/weather?lat="); /* StringBuffer 객체 생성 */
+					weather.append(MapX); /* 위도 */ weather.append("&lon="); weather.append(MapY); /* 경도 */ weather.append("&units=metric&mode=json");
+					
+					/* 외부 사이트 연결 관련 구문 */
+					URL url = new URL(weather.toString()); /* URL 객체 생성 */
+					/* URL을 통해 사이트에 연결하기 위한 구문 */
+					HttpURLConnection con = (HttpURLConnection) url.openConnection();
+					InputStream is = con.getInputStream();
+					if(con.getResponseCode() == HttpURLConnection.HTTP_OK) /* 정상적으로 URL에 연결이 되었을 경우 */
+					{
+						Reader reader = new InputStreamReader(is, "utf-8");
+						BufferedReader br = new BufferedReader(reader);
+						String read = null; /* Json 데이터를 임시 저장을 위한 변수 */
+						String jsonStr = ""; /* Json 데이터를 저장 하기 위한 변수 */
+						String result[];
+						while((read = br.readLine()) != null) { jsonStr += read; } /* Json 데이터를 저장 하는 구문 */
+						/* Json 관련 구문 */
+						JSONObject obj = new JSONObject(jsonStr); /* String -> JSON Object로 만드는 구문 */
+						
+						/* 현제 날씨 */
+						result = obj.get("weather").toString().split(","); /* "," 해당 문자를 자른 후 배열 저장 */
+						Weather_icon = result[1].substring(8, result[1].lastIndexOf("\"")); /* 날씨 아이콘  */
+						Weather_state = result[2].substring(15, result[2].lastIndexOf("\"")).toLowerCase(); /* 현제 날씨 상태 */
+						
+						/* 현제 온도 */
+						result = obj.get("main").toString().split(","); /* 현제 온도를 구하는 구문 */
+						Weather_tem = result[1].substring(7); /* 현제 온도 입력 */
+					} con.disconnect();
+				} catch (Exception e) { e.printStackTrace(); }
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void result)
+		{
+			/* 텍스트 뷰 */
+			final TextView weather_text = (TextView)findViewById(R.id.weather_information_textview); /* 현제 날씨 정보와 온도를 출력 해주는 텍스트 뷰 */
+			/* 이미지 뷰 */
+			final ImageView weather_image = (ImageView)findViewById(R.id.weather_information_imageview); /* 현제 날씨 아이콘을 등록 해주는 구문 */
+			    	
+			/* StringBuffer 객체 생성 - 날씨 온도와 정보 */
+			StringBuffer weather_temp = new StringBuffer();
+			double temp = Double.valueOf(Weather_tem).doubleValue(); /* String -> Double 형 변환 */
+			weather_temp.append(Weather()); weather_temp.append(" ("); weather_temp.append(Math.round(temp)); weather_temp.append("℃)");
+			weather_text.setText(weather_temp.toString()); /* 텍스트 뷰에 텍스트 연결 */
+			    	
+			/* StringBuffer 객체 생성 - 날씨 아이콘 */
+			StringBuffer weather_icon = new StringBuffer(); /* StringBuffer 객체 생성 */
+			weather_icon.append("@drawable/"); weather_icon.append("ic_"); weather_icon.append(Weather_icon); /* Icon 경로를 조합 해주는 구문 */
+			int resID = getResources().getIdentifier(weather_icon.toString(), "drawable", MainActivity.this.getPackageName()); /* 해당 아이콘에 경로를 조회 및 맞춰주는 구문 */
+			weather_image.setImageResource(resID); /* 이미지뷰에 띄우기 */
+			
+			Map_Image_download(); /* Image를 서버로 부터 다운받아서 이미지 뷰에 띄어 주는 구문 호출 */
+			
+			/* XML 함수 호출 구문 */
+			XML(1); /* 음식점을 조회하는 함수 호출 */
+			XML(2); /* 숙소를 조회하는 함수 호출 */
+			
+			/* 지역 코드와 관광지를 조회하는 구문 */
+			XML(3); /* 지역 코드를 조회하는 함수 호출 */
+			XML(4); /* 관광지를 조회하는 함수 호출 */
+			
+			is = false; /* 모든 것이 끝났을 경우 False 값 저장 */
+			
+			Dialog.dismiss();
+			super.onPostExecute(result);
+		}
+	}
+	
+	/* TODO Weather 상태를 찾아서 매치해주는 함수 */
+	private static String Weather() 
+	{
+		String Weather = null; /* 임시 날짜 저장 변수 생성 */
+		switch(Weather_state) 
+		{
+			case ("sky is clear") : { Weather = "맑음"; break; }
+			case ("few clouds") : { Weather = "구름 조금"; break; }
+			case ("scattered clouds") : { Weather = "구름 많음"; break; }
+			case ("broken clouds") : { Weather = "약간 흐림"; break; }
+			case ("overcast clouds") : { Weather = "매우 흐림"; break; }
+			case ("light rain") : { Weather = "약한비"; break; }
+			case ("dhower rain") : { Weather = "소나기"; break; }
+			case ("rain") : { Weather = "비"; break; }
+			case ("thunderstorm") : { Weather = "뇌우"; break; }
+			case ("snow") : { Weather = "눈"; break; }
+			case ("mist") : { Weather = "흐림"; break; }
+		}
+		return Weather;
+	}
+	
+	/* TODO XML을 조회 한 후 리스트 뷰의 띄어주는 함수 */
+	private void XML(int number)
+	{
+		try 
+		{
+			/* Xml pull 파실 객체 생성 */
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			factory.setNamespaceAware(true);
+			XmlPullParser parser = factory.newPullParser();
+				
+			StringBuffer result = null; /* StringBuffer 객체 생성 */
+			
+			switch(number)
+			{
+				case (1) : /* 음식점 조회 */
+				{
+					/* StringBuffer 관련 구문 */
+					result = new StringBuffer("https://apis.daum.net/local/v1/search/category.xml?location="); /* StringBuffer 객체 생성 */
+					result.append(MapX); result.append(","); result.append(MapY); /* 위도와 경도 */
+					result.append("&code="); result.append("FD6"); result.append("&radius=10000");
+					result.append("&apikey="); result.append(API_KEY.Daum_API_KEY); /* Daum API KEY */ break;
+				}
+				case (2) : /* 숙소 조회 */
+				{
+					/* StringBuffer 관련 구문 */
+					result = new StringBuffer("https://apis.daum.net/local/v1/search/category.xml?location="); /* StringBuffer 객체 생성 */
+					result.append(MapX); result.append(","); result.append(MapY); /* 위도와 경도 */
+					result.append("&code="); result.append("AD5"); result.append("&radius=10000");
+					result.append("&apikey="); result.append(API_KEY.Daum_API_KEY); /* Daum API KEY */ break;
+				}
+				case (3) : /* 지역 코드 조회 */
+				{
+					/* StringBuffer 관련 구문 */
+					result = new StringBuffer("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaCode?ServiceKey="); /* StringBuffer 객체 생성 */
+					/* API KEY */ result.append(API_KEY.kr_GoDATA_API_KEY); result.append("&MobileOS=AND&MobileApp=MyTravel"); 
+					result.append("&numOfRows=40&areaCode="); result.append(Admin_Code); /* 지역코드 삽입 */
+					break;
+				}
+				case (4) :
+				{
+					/* StringBuffer 관련 구문 */
+					result = new StringBuffer("http://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?ServiceKey="); /* StringBuffer 객체 생성 */
+					result.append(API_KEY.kr_GoDATA_API_KEY); result.append("&contentTypeId="); result.append(12); 
+					result.append("&areaCode="); result.append(Admin_Code); result.append("&sigunguCode="); result.append(Locality_Code());
+					result.append("&cat1="); result.append(""); result.append("&cat2="); result.append(""); result.append("&cat3="); result.append("");
+					result.append("&listYN=Y&MobileOS=AND&MobileApp=MyTravel&arrange=A&numOfRows=15&pageNo=1");
+					break;
+				}
+			}	
+				/* 외부 사이트 연결 관련 구문 */
+				URL url = new URL(result.toString()); /* URL 객체 생성 */ 
+			 	InputStream in = url.openStream(); /* 해당 URL로 연결 */
+				parser.setInput(in, "UTF-8"); /* 외부 사이트 데이터와 인코딩 방식을 설정 */		
+				
+			/* XML 파싱 관련 변수 관련 구문 */
+			int eventType = parser.getEventType(); /* 파싱 이벤트  관련 저장 변수 생성 */
+			boolean isItemTag = false;
+			String tagName = null; /* Tag의 이름을 저장 하는 변수 생성 */
+
+			/* XML 문서를 읽어 들이는 구문 */
+			while (eventType != XmlPullParser.END_DOCUMENT) 
+			{
+				if(eventType == XmlPullParser.START_TAG) 
+				{
+					tagName = parser.getName();
+					
+					switch(number) /* XML Hedler 시작 부분 */
+					{
+						case (1) : { if(tagName.equals("channel")) { isItemTag = true; } /* XML channel 시작과 끝부분 */ break; }
+						case (2) : { if(tagName.equals("channel")) { isItemTag = true; } /* XML channel 시작과 끝부분 */ break; }
+						case (3) : { if(tagName.equals("response")) { isItemTag = true; } /* XML channel 시작과 끝부분 */ break; }
+						case (4) : { if(tagName.equals("response")) { isItemTag = true; } /* XML channel 시작과 끝부분 */ break; }
+					}
+					
+				} else if (eventType == XmlPullParser.TEXT && isItemTag) 
+				{
+					switch(number)
+					{
+						case (1) :
+						{
+							if(tagName.equals("title")) { TITLE.add(parser.getText()); } /* 상호명 */
+							if(tagName.equals("address")) { ADDRESS.add(parser.getText()); } /* 주소 */
+							break;
+						}
+						case (2) :
+						{
+							if(tagName.equals("title")) { TITLE.add(parser.getText()); } /* 상호명 */
+							if(tagName.equals("address")) { ADDRESS.add(parser.getText()); } /* 주소 */
+							break;
+						}
+						case (3) :
+						{
+							if(tagName.equals("code")) { SigunguCode.add(parser.getText()); } /* 지역 코드 */
+							if(tagName.equals("name")) { SigunguName.add(parser.getText()); } /* 지역 명 */
+							break;
+						}
+						case (4) :
+						{
+							if(tagName.equals("addr1")) { ADDRESS.add(parser.getText()); } /* 주소 */
+							if(tagName.equals("title")) { TITLE.add(parser.getText()); } /* 이름 */
+							break;
+						}
+					}
+				} 
+				else if (eventType == XmlPullParser.END_TAG) 
+				{ 
+					tagName = parser.getName();
+					switch(number)
+					{
+						case (1) : { if(tagName.equals("channel")) { isItemTag = false; } break; }
+						case (2) : { if(tagName.equals("channel")) { isItemTag = false; } break; }
+						case (3) : { if(tagName.equals("response")) { isItemTag = false; } break; }
+						case (4) : { if(tagName.equals("response")) { isItemTag = false; } break; }
+					}
+					  
+				}
+				eventType = parser.next(); /* 다음 XML 객체로 이동 */
+			} in.close(); /* Stream Close */
+		} catch (Exception e) { e.printStackTrace(); }
+		
+		ArrayList<HashMap<String, String>> Array_result = new ArrayList<HashMap<String, String>>(); /* ArrayList<HashMap> 생성 */
+		
+		switch(number)
+		{
+			case (1) : 
+			{
+				int legth = TITLE.size(); /* ArrayList의 사이지를 저장하는 변수 생성 */		
+				/* Daum 음식점 관련 구문 */
+				for(int count=0; count<legth; count++) 
+				{
+					if( (!TITLE.get(count).equals("\n")) && (!ADDRESS.get(count).equals("\n")) ) 
+					{
+						HashMap<String, String> item = new HashMap<String, String>(); /* HashMap 객체 생성 */
+						item.put("item1", TITLE.get(count)); /* 이름 */
+						item.put("item2", ADDRESS.get(count)); /* 주소 */
+						Array_result.add(item); /* HashMap에 객체 추가 */ 
+					}
+				}
+				SimpleAdapter simpleAdapter = new SimpleAdapter(MainActivity.this, Array_result, android.R.layout.simple_list_item_2, new String[] {"item1", "item2"}, new int[] {android.R.id.text1, android.R.id.text2} ); /* Simple Adapter 객체 생성 */
+				food_ListView.setAdapter(simpleAdapter);
+				
+				TITLE.clear(); /* TITLE ArrayList 초기화 */
+				ADDRESS.clear(); /* ADDRESS ArrayList 초기화 */
+				break;
+			}
+			case (2) : 
+			{
+				int legth = TITLE.size(); /* ArrayList의 사이지를 저장하는 변수 생성 */		
+				/* Daum 숙소 관련 구문 */
+				for(int count=0; count<legth; count++) 
+				{
+					if( (!TITLE.get(count).equals("\n")) && (!ADDRESS.get(count).equals("\n")) ) 
+					{
+						HashMap<String, String> item = new HashMap<String, String>(); /* HashMap 객체 생성 */
+						item.put("item1", TITLE.get(count)); /* 이름 */
+						item.put("item2", ADDRESS.get(count)); /* 주소 */
+						Array_result.add(item); /* HashMap에 객체 추가 */ 
+					}
+				}
+				SimpleAdapter simpleAdapter = new SimpleAdapter(MainActivity.this, Array_result, android.R.layout.simple_list_item_2, new String[] {"item1", "item2"}, new int[] {android.R.id.text1, android.R.id.text2} ); /* Simple Adapter 객체 생성 */
+				lodging_ListView.setAdapter(simpleAdapter);
+				
+				TITLE.clear(); /* TITLE ArrayList 초기화 */
+				ADDRESS.clear(); /* ADDRESS ArrayList 초기화 */
+				break;
+			}
+			case (4) :
+			{
+				int legth = TITLE.size(); /* ArrayList의 사이지를 저장하는 변수 생성 */
+				for(int count=0; count<legth; count++) 
+				{
+					HashMap<String, String> item = new HashMap<String, String>(); /* HashMap 객체 생성 */
+					item.put("item1", TITLE.get(count)); /* 이름 */
+					item.put("item2", ADDRESS.get(count)); /* 주소 */
+					Array_result.add(item); /* HashMap에 객체 추가 */
+				}
+				
+				SimpleAdapter simpleAdapter = new SimpleAdapter(MainActivity.this, Array_result, android.R.layout.simple_list_item_2, new String[] {"item1", "item2"}, new int[] {android.R.id.text1, android.R.id.text2} ); /* Simple Adapter 객체 생성 */
+				tourist_listview.setAdapter(simpleAdapter);
+				
+				TITLE.clear(); /* TITLE ArrayList 초기화 */
+				ADDRESS.clear(); /* ADDRESS ArrayList 초기화 */
+				break;
+			}
+		}
+	}
+	
+	/* TODO 지역 코드를 조회 하고 리턴을 해주는 함수 생성 */
+	private String Locality_Code()
+	{
+		String SingAreaCode = null; /* 매칭 된 지역 코드 저장 변수 */
+		int legth = SigunguCode.size(); /* SigunguCode 사이즈 저장 하는 변수 생성 */
+		for(int count=0; count<legth; count++)
+		{ if(Locality.equals(SigunguName.get(count))) { SingAreaCode = SigunguCode.get(count); } }
+		return SingAreaCode;
+	}
+	
+	/* TODO Image를 서버로 부터 다운받아서 이미지 뷰에 띄어 주는 구문 */
+	private void Map_Image_download()
+	{
+		URL url = null; /* URL 객체 생성 */
+		Bitmap image_bimap = null; /* Bitmap Image 재사용을 위한  초기화 */
+		
+		/* Geocoder 관련 구문 */
+		Geocoder geocoder = new Geocoder(this); /* Geocoder 객체 생성 */
+		List<Address> list = null; /* List<Address> 객체 생성 */
+		
+		/* 텍스트 뷰 */
+    	final TextView map_text = (TextView)findViewById(R.id.point_textview);
+    	/* 이미지 뷰 */
+    	final ImageView map_image = (ImageView)findViewById(R.id.tour_map_imageview);
+    	
+    	try /* Image 부분 */
+    	{
+    		/* StringBuffer 객체 생성 */
+    		StringBuffer Google_string = new StringBuffer("http://maps.googleapis.com/maps/api/staticmap?center=");
+			Google_string.append(MapX + "," + MapY); /* 카메라 이동 위도와 경도 */
+			Google_string.append("&zoom=18&size=640x640&scale=2&maptype=roadmap&markers=color:blue|label:N|");
+			Google_string.append(MapX + "," + MapY); /* 마커 설정 위도와 경도 */
+			Google_string.append("%7C11211&sensor=false");
+			Google_string.append("&key=AIzaSyAPwZbV6iLNwLv23_3l-dmS_E6pVX34e0I"); /* Google API Key */
+			url = new URL(Google_string.toString()); /* URL 객체 생성 */
+			
+			/* 서버로 부터 이미지를 다운 받는 구문 */
+			HttpURLConnection http = (HttpURLConnection)url.openConnection(); /* HttpURLConnection 객체 생성 및 접속 */
+			http.setDoInput(true);
+			http.connect(); /* 서버와의 연결 */
+			
+			/* 이미지 뷰에 이미지를 띄우는 구문 */
+			InputStream is = http.getInputStream(); /* InputStream 객체 생성 */
+			image_bimap = BitmapFactory.decodeStream(is); /* 서버로 부터 받은 이미지를 Bitmap에 저장 */
+			map_image.setImageBitmap(image_bimap); /* Bitmap을 이미지 뷰에 변경 */
+		} catch(Exception e) { e.printStackTrace(); }
+    	
+    	try /* 현재 위치 부분 */
+    	{
+    		list = geocoder.getFromLocation(MapX, MapY, 1); /* 위도와 경도를 통해서 현재 위치를 받아오는 구문 */
+    		
+    		/* 지역 주소를 저장하기 위한 구문 */
+    		if( (list != null) && (list.size()>0) )
+    		{
+    			Address address = list.get(0); /* Address 주소 객체 생성 */
+    			AdminArea = address.getAdminArea(); /* 특별시/광역시/도 */
+    			Locality = address.getLocality(); /* 시/구/군 */
+    			
+    			StringBuffer point = new StringBuffer(); /* 주소 관련 StringBuffer 객체 생성 */
+    			point.append(address.getLocality()); /* 시/구/군 */
+    			point.append(" "); if(!address.equals(null)) { point.append(address.getSubLocality()); } /* 구 */ point.append(" ");
+    			point.append(address.getThoroughfare()); /* 동/읍 */ point.append(" "); point.append(address.getFeatureName()); /* 번지 */
+    			map_text.setText(point.toString()); /* 현제 주소를 텍스트 뷰로 출력 */
+    			
+    			Admin_Code = surroundings.Area_Codefind(AdminArea); /* 지역 코드를 조회 하는 구문 */
+    		}
+    	} catch(Exception e) { e.printStackTrace(); }
+	}
+}

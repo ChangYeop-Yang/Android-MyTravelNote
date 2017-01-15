@@ -1,0 +1,83 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff" >
+	<!-- 스피너 및 검색 버튼 관련 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/tour_find_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp" >
+        <!-- 지역 코드 스피너 -->
+        <Spinner
+            android:id="@+id/area_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+        <!-- 시/구/군/동 코드 스피너 -->
+        <Spinner
+            android:id="@+id/regional_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+        <!-- 문화타입 코드 스피너 -->
+        <Spinner
+            android:id="@+id/type_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+		<!-- 검색 버튼 -->
+        <Button
+        	android:id="@+id/find_button"
+        	android:layout_width="30dp"
+        	android:layout_height="30dp"
+        	android:layout_marginLeft="15dp"
+        	android:layout_weight="1"
+        	android:background="@drawable/tour_but" />
+    </LinearLayout>
+    <!--버튼 관련 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/tour_buuton_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true" >
+		<!-- 이전 버튼 -->
+        <Button
+            android:id="@+id/tour_befor_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:textStyle="bold"
+            android:text="@string/tour_before" />
+		<!-- 다음 버튼 -->
+        <Button
+            android:id="@+id/tour_next_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:enabled="false"
+            android:text="@string/tour_next" />
+    </LinearLayout>
+	<!-- 리스트뷰 관련 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/tour_listview_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tour_buuton_layout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tour_find_layout"
+        android:orientation="vertical" >
+        <!-- 리스트뷰 -->
+    	<ListView
+        android:id="@+id/tour_Main_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    </LinearLayout>
+</RelativeLayout>

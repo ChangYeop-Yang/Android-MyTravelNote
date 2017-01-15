@@ -1,0 +1,77 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/festival_listView_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff" >
+    <!-- 썸네일 아이콘이 들어갈 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/festival_image_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="vertical" >
+        <!-- 썸네일 아이콘이 들어 갈 이미지 뷰 -->
+        <ImageView
+            android:id="@+id/festival_image"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/festival_photo"
+            android:scaleType="fitXY"
+            android:src="@drawable/abc_ab_share_pack_holo_light" />
+    </LinearLayout>
+    <!-- 이름과 주소가 들어가는 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/festival_text_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical" >
+        <!-- 이름이 저장 되는 레이 아웃 -->
+        <LinearLayout
+            android:id="@+id/festival_name_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+            <!-- 이름이 설정 되는 텍스트 뷰 -->
+            <TextView
+                android:id="@+id/festival_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/festival_name"
+                android:textColor="#22741C"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <!-- 주소가 저장 되는 레이 아웃 -->
+        <LinearLayout
+            android:id="@+id/festival_address_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical" >
+            <!-- 주소가 설정 되는 텍스트 뷰 -->
+            <TextView
+                android:id="@+id/festival_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/festival_address"
+                android:textColor="#000000"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
+        <!-- 행사날짜가 저장 되는 레이 아웃 -->
+        <LinearLayout
+            android:id="@+id/festival_date_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical" >
+            <!-- 행사날짜가 설정 되는 텍스트 뷰 -->
+            <TextView
+                android:id="@+id/festival_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/festival_date"
+                android:textColor="#0100FF"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout><!-- From: file:/C:/Users/Mari/Documents/Project/MyTravelNote/res/layout/activity_festival_listview.xml -->

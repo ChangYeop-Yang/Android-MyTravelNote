@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/festivel_minutely_totallayout"
+    android:background="#ffffff"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+    <RelativeLayout
+        android:id="@+id/festivel_minutely_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="#ffffff"
+        android:layout_margin="10dp" >
+        <!-- Image layout View -->
+        <RelativeLayout
+        android:id="@+id/festivel_top_minutely_layout"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/image_border"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+        <!-- 상세페이지 이미지 뷰 -->
+        <ImageView
+            android:id="@+id/festivel_minutely_imageview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitXY"
+            android:contentDescription="@string/festival_minutely_photo"
+            android:src="@drawable/image_border" />
+    </RelativeLayout>
+    <!-- Text layout View -->
+    <RelativeLayout
+        android:id="@+id/festivel_minutely_textBox_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/festivel_top_minutely_layout"
+        android:layout_alignParentRight="true"
+        android:background="#ffffff"
+        android:layout_alignTop="@+id/festivel_top_minutely_layout"
+        android:layout_toRightOf="@+id/festivel_top_minutely_layout"
+        android:gravity="center" >
+		<!-- 제목  텍스트 뷰 -->
+        <TextView
+            android:id="@+id/festivel_minutely_title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="3dp"
+            android:textColor="#a1deff"
+            android:textStyle="bold"
+            android:text="@string/festival_minutely_name" />
+		<!-- 위치 텍스트 뷰 -->
+        <TextView
+            android:id="@+id/festivel_minutely_point_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/festivel_minutely_title_textview"
+            android:textSize="12sp"
+            android:layout_marginBottom="5dp"
+            android:textColor="#000000"
+            android:text="@string/festival_minutely_address" />
+		<!-- 지도 관련 이미지 뷰 레이아웃 -->
+        <LinearLayout
+            android:id="@+id/festivel_minutely_point_imagelayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/festivel_minutely_point_textview"
+            android:gravity="center"
+            android:orientation="vertical" >
+            <!-- 지도 관련 이미지 뷰 -->
+            <ImageView
+                android:id="@+id/festivel_minutely_point_imageview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:contentDescription="@string/festival_minutely_map"
+                android:src="@drawable/image_border" />
+        </LinearLayout></RelativeLayout>
+        
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/festivel_minutely_scrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/festivel_minutely_total"
+        android:layout_alignRight="@+id/festivel_minutely_total"
+        android:layout_below="@+id/festivel_minutely_total"
+        android:background="@drawable/image_border">
+		<!-- 스크롤 뷰 자식 레이아웃 -->
+        <RelativeLayout
+            android:id="@+id/festivel_minutely_scrollView_below"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="#ffffff" >
+            <!-- 상세 설명 텍스트 뷰 -->
+            <RelativeLayout
+                android:id="@+id/festivel_minutely_overview_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="5dp"
+                android:background="#ffffff" >
+            <TextView
+                android:id="@+id/festivel_minutely_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/festival_minutely_overview"
+                android:textColor="#a1deff"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <!-- 상세 설명이 적히는 TextView -->
+            <TextView
+                 android:id="@+id/festivel_minutely_overview"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@+id/festivel_minutely_textview"
+                 android:text="@string/festival_minutely_overview"
+                 android:layout_marginLeft="5dp"
+                 android:textColor="#000000"
+                 android:layout_marginBottom="10dp"/>
+            </RelativeLayout>
+            <!-- 상세 설명이 추가 되어 적히는 레이아웃 -->
+            <RelativeLayout
+                android:id="@+id/festivel_minutely_scollview_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/festivel_minutely_overview_layout">
+				<!-- 주최사 레이아웃 -->
+                <RelativeLayout
+                    android:id="@+id/festivel_minutely_information_layout"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                <!-- 주최사 -->
+                <TextView
+                    android:id="@+id/festivel_minutely_information"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/festival_minutely_information1"
+                    android:textColor="#a1deff"
+                    android:textStyle="bold" />
+                <!-- 주최사 텍스트가 추가되는 부분 -->
+				<TextView
+                    android:id="@+id/festivel_minutely_information_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#000000"
+                    android:layout_toRightOf="@+id/festivel_minutely_information"
+                    android:text="@string/festival_minutely_information1" />
+                </RelativeLayout>
+				<!-- 주관사 관련 레이아웃 -->
+                <RelativeLayout
+                    android:id="@+id/festivel_minutely_information2_layout"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/festivel_minutely_information_layout" >
+				<!-- 주관사 -->
+                <TextView
+                    android:id="@+id/festivel_minutely_information2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#a1deff"
+                    android:textStyle="bold"
+                    android:text="@string/festival_minutely_information2" />
+                <!-- 주관사 텍스트가 추가 되는 부분 -->
+                <TextView
+                    android:id="@+id/festivel_minutely_information2_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#000000"
+                    android:layout_toRightOf="@+id/festivel_minutely_information2"
+                    android:text="@string/festival_minutely_information2" />
+                </RelativeLayout>
+                <!-- 행사장소 관련 레이아웃 -->
+                <RelativeLayout
+                    android:id="@+id/festivel_minutely_point_layout"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/festivel_minutely_information2_layout" >
+				<!-- 행사장소 -->
+                <TextView
+                    android:id="@+id/festivel_minutely_point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#a1deff"
+                    android:textStyle="bold"
+                    android:text="@string/festival_minutely_point" />
+                <!-- 행사장소 텍스트가 추가되는 부분 -->
+                <TextView
+                    android:id="@+id/festivel_minutely_point_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/festivel_minutely_point"
+                    android:text="@string/festival_minutely_point" />
+                </RelativeLayout>
+                <!-- 이용정보 관련 레이아웃 -->
+                <RelativeLayout
+                    android:id="@+id/festivel_minutely_use_layout"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/festivel_minutely_point_layout" >
+                <!-- 이용정보 텍스트가 추가되는 부분 -->
+                <TextView
+                    android:id="@+id/festivel_minutely_use"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="#a1deff"
+                    android:text="@string/festival_minutely_useinformation" />
+                <!-- 이용정보 텍스트가 추가되는 부분 -->
+                <TextView
+                    android:id="@+id/festivel_minutely_use_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/festivel_minutely_use"
+                    android:text="@string/festival_minutely_useinformation" />
+                </RelativeLayout>
+				<!-- 주변 음식점 지도 -->
+				<RelativeLayout
+				    android:id="@+id/festivel_minutely_food_bad_total_layout"
+				    android:layout_width="match_parent"
+				    android:layout_height="match_parent"
+				    android:layout_below="@+id/festivel_minutely_use_layout"
+					android:gravity="center" >
+				<RelativeLayout
+				    android:id="@+id/festivel_minutely_food_map_layout"
+				    android:layout_width="140dp"
+				    android:layout_height="140dp"
+				    android:layout_margin="5dp" >
+                <ImageView
+                    android:id="@+id/festivel_minutely_foodzoon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:contentDescription="@string/tour_foodzoon"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/image_border" />
+
+                <TextView
+                    android:id="@+id/festivel_minutely_food_zoon_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#a1deff"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text="@string/minutely_foodzoon" />
+
+                </RelativeLayout>
+				<!-- 주변 숙소 지도 -->
+				<RelativeLayout
+				    android:id="@+id/festivel_minutely_bad_map_layout"
+				    android:layout_width="140dp"
+				    android:layout_height="140dp"
+				    android:layout_margin="5dp"
+				    android:layout_toRightOf="@+id/festivel_minutely_food_map_layout" >
+                <ImageView
+                    android:id="@+id/festivel_minutely_bad"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/tour_lodging"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/image_border" />
+
+                <TextView
+                    android:id="@+id/festivel_minutely_bad_zoon_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#a1deff"
+                    android:gravity="center"
+					android:textStyle="bold"                   
+                    android:text="@string/minutely_badzoon" />
+
+                </RelativeLayout>
+            </RelativeLayout></RelativeLayout>
+            </RelativeLayout></ScrollView>
+            
+</RelativeLayout>

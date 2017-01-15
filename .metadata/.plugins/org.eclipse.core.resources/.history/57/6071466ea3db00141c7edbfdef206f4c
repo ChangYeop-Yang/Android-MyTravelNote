@@ -1,0 +1,56 @@
+import java.util.Scanner;
+
+class Sum
+{
+	int [] Num = {0, 0, 0, 0, 0};
+	
+	/* Sum 관련 생성자 메소드 */
+	public Sum(int[] mArray) { Num = mArray; }
+	
+	/* 총 합을 계산 하는 메소드 */
+	public int Sum_Result()
+	{
+		int temporary = 0;
+		
+		synchronized(this) 
+		{ for(int temp =0; temp<Num.length; temp++) { temporary += Num[temp]; } }
+		return temporary;
+	}
+	
+}
+
+/* 사용자에 값을 입력 받는 클레스 */
+class SetArray extends Thread
+{
+	private int[] INum = {0,0,0,0,0};
+	
+	private Scanner mScanner = NULL;
+	
+	
+}
+
+/* 사용자에 값을 입력 받은 후 합을 구하는 클래스 */
+class GetArray extends Thread
+{
+	
+}
+
+public class Test
+{
+	public static void main(String[] args)
+	{
+		/* int */
+		int[] mNum = {0, 0, 0, 0, 0};
+		
+		final Scanner mScanner = new Scanner(System.in); /* Scanner 인스턴스 생성 */
+		
+		for(int temp = 0; temp<mNum.length; temp++)
+		{ mNum[temp] = mScanner.nextInt(); }
+		
+		Sum mSum = new Sum(mNum); /* Sum 인스턴스 생성 */
+		
+		System.out.print(mSum.Sum_Result());
+		
+		return;
+	}
+}

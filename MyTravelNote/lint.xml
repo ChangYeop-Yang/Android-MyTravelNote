@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="DefaultLocale" severity="ignore" />
+    <issue id="SdCardPath">
+        <ignore path="src/kr/example/mytravelnote/MainActivity.java" />
+    </issue>
+</lint>

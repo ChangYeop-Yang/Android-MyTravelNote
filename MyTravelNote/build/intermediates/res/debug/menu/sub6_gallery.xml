@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
+    <!-- 공유하기 -->
+    <item
+        android:id="@+id/action_share"
+        android:title="@string/map_share"
+        android:orderInCategory="1"
+        yourapp:showAsAction="always"
+        yourapp:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
+    <!-- ActionBar 삭제하기 아이콘 -->
+    <item
+        android:id="@+id/Delete_icon"
+        android:icon="@drawable/ic_delete"
+        android:orderInCategory="2"
+        yourapp:showAsAction="always"
+        android:title="@string/gallery_delete" />
+</menu>
+<!-- From: file:/C:/Users/Mari/Documents/Project/MyTravelNote/res/menu/sub6_gallery.xml -->

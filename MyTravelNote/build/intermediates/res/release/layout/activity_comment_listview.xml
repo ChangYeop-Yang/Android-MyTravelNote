@@ -1,0 +1,54 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Comment_listview_layout"
+    android:background="#ffffff"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+	<!-- 코멘트 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/Comment_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/image_border"
+        android:orientation="vertical" >
+		<!-- 대화 텍스트뷰 -->
+        <TextView
+            android:id="@+id/Comment_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:text="@string/comment_talk" />
+        <!-- 장소 텍스트뷰 -->
+        <TextView
+            android:id="@+id/Comment_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textColor="#22741C"
+            android:text="@string/comment_point" />
+		<!-- 이름 및 날짜 레이아웃 -->
+        <LinearLayout
+            android:id="@+id/Comment_name_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <!-- 이름 텍스트뷰 -->
+            <TextView
+                android:id="@+id/Comment_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:textColor="#000000"
+                android:text="@string/comment_name" />
+			<!-- 날짜 텍스트뷰 -->
+            <TextView
+                android:id="@+id/Comment_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="20dp"
+                android:textColor="#0100FF"
+                android:text="@string/comment_date" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout><!-- From: file:/C:/Users/Mari/Project/MyTravelNote/res/layout/activity_comment_listview.xml -->

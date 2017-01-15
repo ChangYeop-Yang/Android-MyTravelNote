@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="기본 설정">
+    <!-- 사용자 이름 설정 구문 -->
+    <CheckBoxPreference 
+        android:defaultValue="false"
+        android:key="useUserName"
+        android:summaryOn="사용자 이름을 사용합니다."
+        android:summaryOff="사용자 이름을 사용하지 않습니다."
+        android:title="사용자 이름 사용"/>
+    <!-- 사용자 이름 설정을 받아 들이는 Edit -->
+    <EditTextPreference 
+        android:defaultValue="여행일기"
+        android:dependency="useUserName"
+        android:key="userName"
+        android:title="사용자 이름 설정"/>
+    </PreferenceCategory>
+    <!-- 화면 설정 구문 -->
+    <PreferenceCategory android:title="화면 설정">
+    <ListPreference 
+        android:defaultValue="1"
+        android:dependency="useDisplay"
+        android:entries="@array/userNameOpen"
+        android:entryValues="@array/userNameOpen_value"
+        android:key="useDisplay"
+        android:summary="카메라 화면을 설정합니다."
+        android:title="화면 설정"/>
+    </PreferenceCategory>
+    <!-- 개발자 점검 -->
+    <PreferenceCategory android:title="어플 정보">
+        <!-- 개발자 정보 -->
+        <Preference 
+            android:summary="개발자 정보를 확인합니다."
+            android:title="개발자 정보">
+            	<intent android:action="android.intent.action.VIEW"
+                android:data="http://yeop9657.blog.me" />
+        </Preference>
+        <!-- 이메일 정보 -->
+        <Preference 
+            android:summary="개발자에게 이메일을 보냅니다."
+            android:title="이메일 보내기">
+            <intent 
+                android:action="android.intent.action.SENDTO" 
+                android:data="mailto:yeop9657@naver.com"/>
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>

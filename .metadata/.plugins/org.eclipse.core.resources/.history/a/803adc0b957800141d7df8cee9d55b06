@@ -1,0 +1,326 @@
+package kr.example.mytravelnote;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.List;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Vibrator;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.RatingBar.OnRatingBarChangeListener;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class SubActivity_photo extends Activity {
+		
+	/* Google Map Static 관련 변수 */
+	private Handler handler = new Handler();
+		
+	/* 카메라 관련 변수 */
+	private static final int CAMERA_CAPTURE = 0;
+	
+	/* SQLite 관련 변수 */
+	protected dbHelper helper;
+	protected SQLiteDatabase DataBase;
+	
+	/* GPS 관련 변수 */
+	private double Latitude; /* 위도 */
+	private double Longitude; /* 경도 */
+	
+	/* 생성자 메소드 */
+	private void GPS(double Latitude, double Longitude){ this.Latitude=Latitude; this.Longitude=Longitude; } /* GPS 생성자 */
+	
+	/* RatingBar 관련 변수 */
+    private float RatingScore = 0;
+	
+	/* TODO SQLite 체크 관련 함수 */
+	protected void SQLlite_check() {
+		/* dbHelper 객체 생성 */
+		helper = new dbHelper(this); 
+		
+		/* 읽기/쓰기 모드로 데이터베이스를 오픈 */
+		try { DataBase = helper.getWritableDatabase(); }
+		/* 읽기 전용 모드로 데이터베이스를 오픈 */
+		catch(SQLiteException ex) { DataBase = helper.getReadableDatabase(); Toast.makeText(getApplicationContext(), "SQLite 문제가 발생 하였습니다.", Toast.LENGTH_SHORT).show(); }
+	}
+	
+	/* TODO File의 이름을 시간과 사용자가 입력 한 결과를 받아서 조합 해주는 함수 */
+	@SuppressWarnings("static-access")
+	private String File_rename() {
+		final Calendar calender = Calendar.getInstance(); /* 캘린더 객체 생성 */
+		final EditText title = (EditText) findViewById(R.id.NameEditText); /* EditText 객체 생성 */
+		/* 사용자가 입력 한 이미지 이름 변수 */ String photo_title = null;
+		
+		/* EditText 공백 체크 구문 */
+		if(title.getText().toString().length() != 0)
+		/* EditText 가 공백이 아닐 경우 */ { 
+			photo_title = title.getText().toString(); /* EditText 파일 이름을 텍스트 형식으로 불러오기 */
+			/* Calendar 변수 */
+			int YEAR = calender.get(calender.YEAR); /* 년 */
+			int MONTH = calender.get(calender.MONTH); /* 월 */
+			int DAY = calender.get(calender.DAY_OF_MONTH); /* 일 */
+			/* 문자열 합치기 */
+			String Filerename = String.format("%d년 %d월 %d일 %s.JPG", YEAR, MONTH, DAY, photo_title);
+			return Filerename; /* 리턴 값 전달 */ }
+		else { Toast.makeText(getApplicationContext(), "제목을 입력해 주세요.", Toast.LENGTH_LONG).show(); return null; } }
+	
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sub_photo);
+     
+        GPS_request(); /* GPS 관련 함수 호출 */
+        
+        SQLlite_check(); /* SQLite 생성 및 업그레이드 관련 함수 호출 */
+	    
+        /* RatingBar 관련 구문 */
+        final RatingBar ratingbar = (RatingBar) findViewById(R.id.ratingBar); /* 점수 RatingBar */
+        /* TODO Auto-generated method stub */
+        ratingbar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
+			@Override
+			public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) 
+			{ RatingScore=rating; Toast.makeText(SubActivity_photo.this, "점수 : " + rating, Toast.LENGTH_SHORT).show(); } });
+        
+        /* TODO 해당 버튼을 터시하여 클릭시 호출 되며 saveBitmap함수를 호출 한다. */
+        Button check_button = (Button)findViewById(R.id.check_button);
+        check_button.setOnClickListener(new OnClickListener() {
+        	@Override
+        	public void onClick(View v) {
+        		Vidrator(); /* 기기 진동 관련 함수 호출 */
+        		String URL = "sdcard/MyTravel/"; /* String 형식으로 경로 저장 */
+        		Bitmap bitmap = takeScreenshot(); /* Bitmap 객체 생성 */
+        		/* Bitmap을 이미지 파일로 저장해주는 함수 호출 */
+        		if( File_rename() != null ) { 
+        			String Path = SaveBitmapToFile(bitmap, URL, File_rename()); /* Bitmap을 JPEG 파일로 저장 시켜주는 함수 */
+        			/* DATABASE에 데이터를 추가하는 함수 호출 */ DataBase_Save(Latitude, Longitude, Path); } } });
+        
+        /* ImageView 객체 생성 */
+    	ImageView photo_image = (ImageView)findViewById(R.id.photo_image);
+    	    	
+    	/* TODO photo_image View 를 선택시 출력 되는 부분 */
+        photo_image.setOnClickListener(new OnClickListener() {
+        	@Override
+        	public void onClick(View v) { 
+    			Toast.makeText(getApplicationContext(), "사진촬영", Toast.LENGTH_SHORT).show();
+    			
+    			/* 사진촬영 관련 인텐트 구문 */
+    			Intent PhotoIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); // 이미지 캡쳐 인텐트 생성
+    			startActivityForResult(PhotoIntent,CAMERA_CAPTURE);
+    			/* 사진촬영 관련 인텐트 구문 */
+    	} });
+    }
+    
+    /* TODO DATABASE에 데이터를 추가하는 함수 */
+    private void DataBase_Save(double Latitude, double Longitude, String Path) {
+    	
+    	/* EditText 객체 생성 및 데이터 저장 */
+        final EditText NameEditText = (EditText) findViewById(R.id.NameEditText); /* 제목 EditText  */
+        String Name = NameEditText.getText().toString();
+        final TextView PonitEditText = (TextView) findViewById(R.id.report_point_text); /* 장소 EditText */
+        String Point = PonitEditText.getText().toString();
+        
+        DataBase.beginTransaction(); /* 트랜잭션 실행 */
+        
+        try { /* Query */ String Query1 = "INSERT INTO photo_db VALUES (null, '" + Name + "','" + Point + "','" + RatingScore + "','" + Latitude + "','" + Longitude + "','" + Path +"');";
+        /* Query문 실행 */DataBase.execSQL(Query1); /* 아무런 문제가 없는 경우 데이터를 저장 시킨다. */ DataBase.setTransactionSuccessful(); } 
+        catch (SQLiteException ex) { ex.printStackTrace(); /* SQLite 오류가 발생 시 토스트 기능 출력 */Toast.makeText(getApplicationContext(), "SQlite INSERT ERROR", Toast.LENGTH_SHORT).show(); }
+        finally { DataBase.endTransaction(); /* 트랜잭션 종료 */ DataBase.close(); /* 데이터 베이스 연결 종료 */ }
+    }
+    
+    /* TODO 해당 URL을 받아서 쓰레드를 이용하여서 Bitmap으로 그려주는 함수 */
+    private void Draw_Bitmap(final double Latitude, final double Longitude) {
+    	/* 쓰레드 객체 생성 */
+    	Thread thread = new Thread(new Runnable() {
+    		
+    	/* *
+    	 * final ImageView Image = 이미지 뷰 관련 변수
+    	 * double Latitude = GPS 관련 변수(위도)
+    	 * double Longitude = GPS 관련 변수(경도)
+    	 * */
+    		
+    		@Override
+    		/* 쓰레드 몸체 부분 */
+    		public void run() {
+    			try {
+    				/* Google map에 대한 StringBuffer 객체 생성 */
+    				final StringBuffer Google_string = new StringBuffer("http://maps.googleapis.com/maps/api/staticmap?center=");
+    				Google_string.append(Latitude + "," + Longitude); /* 카메라 이동 위도와 경도 */
+    				Google_string.append("&zoom=18&size=640x640&scale=2&maptype=roadmap&markers=color:blue|label:N|");
+    				Google_string.append(Latitude + "," + Longitude); /* 마커 설정 위도와 경도 */
+    				Google_string.append("%7C11211&sensor=false");
+    				Google_string.append("&key=AIzaSyAPwZbV6iLNwLv23_3l-dmS_E6pVX34e0I"); /* Google API Key */
+    				/* ImageView 객체 생성 */
+    				final ImageView imageview = (ImageView)findViewById(R.id.gps_image);
+    				/* URL 객체 생성 */
+    				URL url = new URL(Google_string.toString());
+    				/* InputStream 객체 생성과 입력받은 URL의 사진정보 가져오기 */
+    				InputStream stram = url.openStream();
+    				/* Bitmap 객체 생성과 해당 스트림을 그림으로 읽어오기 */
+    				final Bitmap bm = BitmapFactory.decodeStream(stram);
+    				
+    				handler.post(new Runnable() {
+    					@Override
+    					public void run() { /* 메서드를 통해 그림 표시 */imageview.setImageBitmap(bm); } }); /* 스트림 종료 */stram.close();
+    			} catch (Exception e) { e.printStackTrace(); } /* 주소가 잘못되었을 경우, 스트림 연결 실패 시 호출 */
+    		}
+    	});
+    	/* 쓰레드 실행 */
+    	thread.start();
+    }
+    
+    /* 액티비티 간에 값을 전달하는 함수 */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	
+    	/* 카메라의 인텐트 결과를 받아 들려 Bitmap 쪼갠 후 받아서 image view 출력해주는 함수 */
+    	if(requestCode == CAMERA_CAPTURE && resultCode == RESULT_OK) {
+    		
+    		/* ImageView 객체 생성 */
+    		ImageView photo_image = (ImageView)findViewById(R.id.photo_image);
+    		
+    		/* bitmap 형식으로 이미지 파일을 저장 */
+    		Bitmap bmp = (Bitmap)data.getExtras().get("data");
+    		
+    		/* bitmap 형식의 이미지를 이미지 뷰에 출력 */
+    		photo_image.setImageBitmap(bmp);
+    	}
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        
+        MenuItem HintItem = menu.add(0, 1, 0, "도움말"); // 도움말 객체 생성
+        HintItem.setIcon(R.drawable.ic_help); // 도움말 아이콘 지정
+        HintItem.setAlphabeticShortcut('h'); // 도움말 단축키 지정
+
+        MenuItem ExitItem = menu.add(0, 2, 0, "뒤로가기"); // 뒤로가기 객체 생성
+        ExitItem.setIcon(R.drawable.ic_exit); // 뒤로가기 아이콘 지정
+        HintItem.setAlphabeticShortcut('q'); // 뒤로가기 단축키 지정
+        
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	
+    	/* 메뉴 관련 구문  */
+    	switch (item.getItemId()) {
+    		case (1) : { Toast.makeText(this, "도움말", Toast.LENGTH_SHORT).show(); return true; } /* 도움말 */
+    		case (2) : { finish(); return true; } /* 종료하기 */
+    		default : { return super.onOptionsItemSelected(item); } }
+    	}
+	
+	/* TODO GPS 위도와 경도를 찾아주는 함수 */
+	private void GPS_request() {
+		// Acquire a reference to the system Location Manager
+		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+		// Define a listener that responds to location updates
+		LocationListener locationListener = new LocationListener() {
+			
+			/* GPS의 좌표가 바뀔 경우 호출 되는 함수 */
+		    public void onLocationChanged(Location location) {
+		      // Called when a new location is found by the network location provider.
+		      final double Latitude = location.getLatitude(); /* 위도 */
+		      final double Longitude = location.getLongitude(); /* 경도 */
+		      /* */ GPS(Latitude, Longitude);
+	        	
+	        	Draw_Bitmap(Latitude, Longitude); /* Google Static Map을 그려주는 함수 호출 */
+		    	Geocoder(Latitude, Longitude); /* 위도와 경도를 통해서 지오코딩을 하여서 구글에서 주소를 반환하는 함수 호출 */
+		    }
+		    
+		    public void onStatusChanged(String provider, int status, Bundle extras) {}
+		    public void onProviderEnabled(String provider) {}
+		    public void onProviderDisabled(String provider) {}
+		  };
+		// Register the listener with the Location Manager to receive location updates
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);}
+	
+	/* TODO 위도와 경도를 통해서 지오코딩을 하여서 구글에서 주소를 반환하는 함수 */ 
+	private void Geocoder(double Latitude, double Longitude) /* Latitude(위도) 와 Longitude(경도)의 인자를 받아서 사용하는 함수 */
+	{
+		/* Google Geocoder 을 위한 객체 생성 */
+		Geocoder geocoder = new Geocoder(this);
+		/* 주소 관련 변수 */
+		List<Address> list = null;
+		/* 해당 텍스트 뷰에 변경을 위한 객체 생성 */
+		TextView report_point_textview = (TextView)findViewById(R.id.report_point_text);
+		
+		try { list = geocoder.getFromLocation(Latitude, Longitude, 1);}
+		/* 위도와 경도를 이용하여서 해당 주소를 저장 */
+		catch (NumberFormatException e) { e.printStackTrace(); }
+		catch (IOException e) { report_point_textview.setText("입출력 오류 발생 : " + e.getMessage()); e.printStackTrace(); }
+		
+		/* 해당 지역의 정보를 받은 뒤 작동이 되는 구문 */
+		if( (list != null) && (list.size()>0) ) {
+			Address address = list.get(0);
+			/* 주소를 출력을 위한 객체 생성 */
+			String addressText = String.format("%s %s %s %s", address.getLocality(), address.getSubLocality(), address.getThoroughfare(), address.getFeatureName());
+			/* 해당 텍스트 뷰에 출력 */
+			report_point_textview.setText(addressText);}
+		/* 해당 주소가 없을 경우 주소를 찾을 수 없는 경고문을 텍스트 뷰에 출력 */
+		else { report_point_textview.setText("현제 위치에 주소를 찾을 수가 없습니다."); }
+	}
+	
+	/* TODO 현제 화면을 Bitmap을 그려주는 함수 */
+	public Bitmap takeScreenshot() {
+		View rootView = findViewById(android.R.id.content).getRootView();
+		rootView.setDrawingCacheEnabled(true);
+		return rootView.getDrawingCache(); }
+	
+	/* TODO Bitmap을 이미지 파일로 저장해주는 함수 */
+	public String SaveBitmapToFile(Bitmap bitmap, String strfilepath, String filename) {
+		/* */
+		File imagePath = new File(strfilepath);
+		
+		if(!imagePath.exists()) { imagePath.mkdirs(); }
+		
+		File fileCacheItem = new File(strfilepath + filename);
+		String path = fileCacheItem.getAbsolutePath(); /* 해당 파일이 저장 되어 있는 경로를 저장 */
+		OutputStream out = null;
+		try { /* 정상적으로 저장이 되었을 경우 */ 
+			fileCacheItem.createNewFile();
+			out = new FileOutputStream(fileCacheItem);
+			bitmap.compress(CompressFormat.JPEG, 100, out); 
+			Toast.makeText(getApplicationContext(), "저장이 되었습니다.", Toast.LENGTH_SHORT).show(); return path;
+		} 
+		catch (FileNotFoundException e) { Log.e("GREC", e.getMessage()); return null; } 
+		catch (IOException e) { Log.e("GREC", e.getMessage()); return null; }
+	}
+	
+	/* TODO 기기 진동 관련 함수 */
+	private void Vidrator() {
+		Vibrator tvibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE); /* Vibrator 객체 생성 */
+		long[] vibratePattern = {100, 100, 300};
+		tvibrator.vibrate(300);
+		tvibrator.vibrate(vibratePattern, -1); }
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="src" path="/google-play-services_lib"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/appcompat_v7"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/MariHome/workspace/FacebookSDK/bin/facebooksdk.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/MariHome/workspace/MyTravelNote/libs/AdamPublisherSDK-2.3.4.jar"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

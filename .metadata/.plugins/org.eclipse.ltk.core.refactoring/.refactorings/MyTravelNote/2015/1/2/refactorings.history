@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;MyTravelNote/res/layout/activity_sessting.xml&apos; to &apos;activity_setting.xml&apos;" description="Rename resource &apos;activity_sessting.xml&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="res/layout/activity_sessting.xml" name="activity_setting.xml" stamp="1420718357792" updateReferences="true"/>
+</session>

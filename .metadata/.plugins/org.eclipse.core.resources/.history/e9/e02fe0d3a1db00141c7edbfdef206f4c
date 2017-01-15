@@ -1,0 +1,22 @@
+import java.util.Scanner;
+
+class Sum
+{
+	
+}
+
+public class Test
+{
+	public static void main(String[] args)
+	{
+		/* int */
+		int[] mNum = {0, 0, 0, 0, 0};
+		
+		final Scanner mScanner = new Scanner(System.in); /* Scanner 인스턴스 생성 */
+		
+		for(int temp = 0; temp<mNum.length; temp++)
+		{ mNum[temp] = mScanner.nextInt(); }
+		
+		return;
+	}
+}

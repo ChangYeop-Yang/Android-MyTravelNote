@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="kr.net.mytravelnote"
+    android:versionCode="8"
+    android:versionName="5" >
+
+    <uses-sdk
+        android:minSdkVersion="12"
+        android:targetSdkVersion="21" />
+    <!-- 카메라 관련 권한 획득 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <!-- 카메라 관련 권한 획득 -->
+
+
+    <!-- 전화 관련 권환 휙득 -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <!-- 기기 진동 관련 권환 획득 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- 쓰기 가능한 저장장치 관련 권한 획득 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORTAGE" />
+
+    <!-- Google Map 관련 구문 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- The following two permissions are not required to use Google Maps Android API v2, but are recommended. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- Google Map 관련 구문 -->
+
+
+    <!-- Google Map Open GL 관련 구문 -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/travel_icon"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+
+        <!-- Google Map API Key -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyAPwZbV6iLNwLv23_3l-dmS_E6pVX34e0I" />
+        <!-- Google Map API Key -->
+        <!-- FaceBook API Key -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity android:name="com.facebook.LoginActivity" />
+        <activity
+            android:name="kr.example.mytravelnote.Intro"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="kr.example.mytravelnote.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light" />
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" />
+ <!-- 카카오톡 API_KEY 설정 -->
+
+
+        <!-- 사진촬영화면 관련 액티비티 권한 설정 -->
+        <activity
+            android:name="kr.example.mytravelnote.SubActivity_photo"
+            android:label="SubActivity_photo"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <!-- 공책화면 관련 액티비티 권한 설정 -->
+        <activity
+            android:name="kr.example.mytravelnote.SubActivity2_notebook"
+            android:label="SubActivity2_notebook"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <!-- 설정화면 관련 액티비티 권한 설정 -->
+        <activity
+            android:name="kr.example.mytravelnote.SubActivity3_setting"
+            android:label="SubActivity3_setting"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <!-- 지도화면 관련 액티비티 권한 설정 -->
+        <activity
+            android:name="kr.example.mytravelnote.SubActivity4_map"
+            android:label="SubActivity4_map"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <!-- 갤러리 관련 액티비티 권한 설정 -->
+        <activity
+            android:name="kr.example.mytravelnote.SubActivity6_gallery"
+            android:label="SubActivity6_gallery"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <!-- 숙소 정보 관련 액티비티 권한 설정 -->
+        <activity
+            android:name="kr.example.mytravelnote.SubActivity7_information"
+            android:label="SubActivity7_information"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <!-- 관광지 정보 관련 액티비티 권한 설정 -->
+        <activity
+            android:name="kr.example.mytravelnote.SubActivity8_tourlist"
+            android:label="SubActivity8_tourlist"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <!-- 관광 세부 정보 관련 액티비티 권한 설정 -->
+        <activity
+            android:name="kr.example.mytravelnote.SubActivity9_minutely"
+            android:label="SubActivity9_minutely"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <!-- 페이스북 관련 액티비티 권한 설정 -->
+        <activity
+            android:name="kr.example.mytravelnote.SubActivity10_facebook"
+            android:label="SubActivity10_facebook"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <!-- 행사 관련 액티비티 권한 설정 -->
+        <activity
+            android:name="kr.example.mytravelnote.SubActivity11_fsetival"
+            android:label="SubActivity11_fsetival"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <!-- 행사 세부 정보 관련 액티비티 권한 설정 -->
+        <activity
+            android:name="kr.example.mytravelnote.SubActivity12_festival_minutely"
+            android:label="SubActivity12_festival_minutely"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <!-- 추천 하기 정보 관련 액티비티 권한 설정 -->
+        <activity
+            android:name="kr.example.mytravelnote.SubActivity13_comment"
+            android:label="SubActivity13_comment"
+            android:theme="@style/Theme.AppCompat.Light" />
+    </application>
+
+</manifest>

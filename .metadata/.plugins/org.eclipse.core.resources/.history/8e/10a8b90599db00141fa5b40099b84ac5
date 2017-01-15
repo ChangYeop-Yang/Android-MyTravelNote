@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tour_minutely_totallayout"
+    android:background="#ffffff"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:id="@+id/minutely_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="#ffffff"
+        android:layout_margin="10dp" >
+        <!-- Image layout View -->
+        <RelativeLayout
+        android:id="@+id/top_minutely_layout"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/image_border"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+        <!-- 상세페이지 이미지 뷰 -->
+        <ImageView
+            android:id="@+id/minutely_imageview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitXY"
+            android:contentDescription="@string/tour_image"
+            android:src="@drawable/image_border" />
+    </RelativeLayout>
+    
+    <!-- Text layout View -->
+    <RelativeLayout
+        android:id="@+id/minutely_textBox_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/top_minutely_layout"
+        android:layout_alignParentRight="true"
+        android:background="#ffffff"
+        android:layout_alignTop="@+id/top_minutely_layout"
+        android:layout_toRightOf="@+id/top_minutely_layout"
+        android:gravity="center" >
+		<!-- 제목  텍스트 뷰 -->
+        <TextView
+            android:id="@+id/minutely_title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="3dp"
+            android:textColor="#a1deff"
+            android:textStyle="bold"
+            android:text="@string/tour_title" />
+		<!-- 위치 텍스트 뷰 -->
+        <TextView
+            android:id="@+id/minutely_point_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/minutely_title_textview"
+            android:textSize="12sp"
+            android:textColor="#000000"
+            android:layout_marginBottom="5dp"
+            android:text="@string/tour_point" />
+		<!-- 지도 관련 이미지 뷰 레이아웃 -->
+        <LinearLayout
+            android:id="@+id/minutely_point_imagelayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/minutely_point_textview"
+            android:gravity="center"
+            android:orientation="vertical" >
+            <!-- 지도 관련 이미지 뷰 -->
+            <ImageView
+                android:id="@+id/minutely_point_imageview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:contentDescription="@string/tour_pointimage"
+                android:src="@drawable/image_border" />
+        </LinearLayout></RelativeLayout>
+        
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/minutely_scrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/minutely_total"
+        android:layout_alignRight="@+id/minutely_total"
+        android:layout_below="@+id/minutely_total"
+        android:background="@drawable/image_border">
+		<!-- 스크롤 뷰 자식 레이아웃 -->
+        <RelativeLayout
+            android:id="@+id/minutely_scrollView_below"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="#ffffff" >
+            <!-- 상세 설명 텍스트 뷰 -->
+            <RelativeLayout
+                android:id="@+id/minutely_overview_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="5dp"
+                android:background="#ffffff" >
+            <TextView
+                android:id="@+id/minutely_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/tour_minutely"
+                android:textColor="#a1deff"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <!-- 상세 설명이 적히는 TextView -->
+            <TextView
+                 android:id="@+id/minutely_overview"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@+id/minutely_textview"
+                 android:text="@string/tour_minutely"
+                 android:layout_marginLeft="5dp"
+                 android:layout_marginBottom="10dp"/>
+            </RelativeLayout>
+            <!-- 상세 설명이 추가 되어 적히는 레이아웃 -->
+            <RelativeLayout
+                android:id="@+id/minutely_scollview_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/minutely_overview_layout">
+				<!-- 문의/안내 레이아웃 -->
+                <RelativeLayout
+                    android:id="@+id/minutely_information_layout"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                <!-- 문의/안내 -->
+                <TextView
+                    android:id="@+id/minutely_information"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tour_information"
+                    android:textColor="#a1deff"
+                    android:textStyle="bold" />
+                <!-- 문의/안내 텍스트가 추가되는 부분 -->
+				<TextView
+                    android:id="@+id/minutely_information_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/minutely_information"
+                    android:text="@string/tour_information" />
+                </RelativeLayout>
+                
+				<!-- 쉬는날 관련 레이아웃 -->
+                <RelativeLayout
+                    android:id="@+id/minutely_offday_layout"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/minutely_information_layout" >
+				<!-- 쉬는날 -->
+                <TextView
+                    android:id="@+id/minutely_offday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#a1deff"
+                    android:textStyle="bold"
+                    android:text="@string/tour_offday" />
+                <!-- 쉬는날 텍스트가 추가 되는 부분 -->
+                <TextView
+                    android:id="@+id/minutely_offday_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/minutely_offday"
+                    android:text="@string/tour_offday" />
+                </RelativeLayout>
+                
+                <!-- 주차시설 관련 레이아웃 -->
+                <RelativeLayout
+                    android:id="@+id/minutely_parking_layout"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/minutely_offday_layout" >
+				<!-- 주차시설 -->
+                <TextView
+                    android:id="@+id/minutely_parking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#a1deff"
+                    android:textStyle="bold"
+                    android:text="@string/tour_parking" />
+                <!-- 주차시설 텍스트가 추가되는 부분 -->
+                <TextView
+                    android:id="@+id/minutely_parking_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/minutely_parking"
+                    android:text="@string/tour_parking" />
+                </RelativeLayout>
+                
+                <!-- 이용시간 관련 레이아웃 -->
+                <RelativeLayout
+                    android:id="@+id/minutely_usetime_layout"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/minutely_parking_layout" >
+                <!-- 이용시간 텍스트가 추가되는 부분 -->
+                <TextView
+                    android:id="@+id/minutely_usetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="#a1deff"
+                    android:text="@string/tour_usetime" />
+                <!-- 이용시간 텍스트가 추가되는 부분 -->
+                <TextView
+                    android:id="@+id/minutely_usetime_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/minutely_usetime"
+                    android:text="@string/tour_usetime" />
+                </RelativeLayout>
+                
+                <!-- 유모차 및 애완동물 관련 레이아웃 -->
+                <RelativeLayout
+                    android:id="@+id/minutely_baby_pat_layout"
+                    android:layout_margin="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/minutely_usetime_layout" >
+				<!-- 유모차 및 애완동물 -->
+                <TextView
+                    android:id="@+id/minutely_pat_baby"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="#a1deff"
+                    android:text="@string/tour_baby_pat" />
+                <!-- 유모차와 애완동물 텍스트가 추가 되는 부분 -->
+                <TextView
+                    android:id="@+id/minutely_pat_baby_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/minutely_pat_baby"
+                    android:text="@string/tour_baby_pat" />
+				</RelativeLayout>
+				<!-- 주변 음식점 지도 -->
+				<RelativeLayout
+				    android:id="@+id/minutely_food_bad_total_layout"
+				    android:layout_width="match_parent"
+				    android:layout_height="match_parent"
+				    android:layout_below="@+id/minutely_baby_pat_layout"
+					android:gravity="center" >
+				<RelativeLayout
+				    android:id="@+id/minutely_food_map_layout"
+				    android:layout_width="140dp"
+				    android:layout_height="140dp"
+				    android:layout_margin="5dp" >
+                <ImageView
+                    android:id="@+id/minutely_foodzoon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:contentDescription="@string/tour_foodzoon"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/image_border" />
+
+                <TextView
+                    android:id="@+id/minutely_food_zoon_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#a1deff"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text="@string/minutely_foodzoon" />
+
+                </RelativeLayout>
+				<!-- 주변 숙소 지도 -->
+				<RelativeLayout
+				    android:id="@+id/minutely_bad_map_layout"
+				    android:layout_width="140dp"
+				    android:layout_height="140dp"
+				    android:layout_margin="5dp"
+				    android:layout_toRightOf="@+id/minutely_food_map_layout" >
+                <ImageView
+                    android:id="@+id/minutely_bad"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/tour_lodging"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/image_border" />
+
+                <TextView
+                    android:id="@+id/minutely_bad_zoon_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:background="#a1deff"
+                    android:gravity="center"
+					android:textStyle="bold"                   
+                    android:text="@string/minutely_badzoon" />
+
+                </RelativeLayout>
+            </RelativeLayout></RelativeLayout>
+            </RelativeLayout></ScrollView>
+            
+</RelativeLayout>

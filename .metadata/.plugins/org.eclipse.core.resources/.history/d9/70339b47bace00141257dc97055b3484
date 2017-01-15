@@ -1,0 +1,758 @@
+package kr.example.mytravelnote;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import kr.example.mytravelnote.apikey.API_KEY;
+import kr.example.mytravelnote.common.Image_loder;
+import kr.example.mytravelnote.sns.kakaotalk;
+import kr.net.mytravelnote.R;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory.Options;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class SubActivity9_minutely extends ActionBarActivity {
+
+	/* ArrayList */
+	private ArrayList<String> name_FA = null;
+	private ArrayList<String> mapX_FA = null;
+	private ArrayList<String> mapY_FA = null;
+	
+	private ArrayList<String> name_LA = null;
+	private ArrayList<String> mapX_LA = null;
+	private ArrayList<String> mapY_LA = null;
+				
+	private String Content_id = null; /* Tour에서 받은 해당 관광지 ID를 저장 시키는 변수 생성 */
+	private int Type_id = 0; /* Tour에서 받은 해당 관관지 타입을 저장 시키는 변수 생성  */
+	private String Area = null; /* 지역 명을 저장하는 변수 생성 */
+
+	/* APP NAME */
+	private final String My_AppName = "MyTravel";
+	
+	/* Context */
+	private final Context mContext = SubActivity9_minutely.this;
+
+	/* 상세 페이지 공통정보 XML 저장용 변수 */
+	String Address_1 = null; /* 관광지 주소1 저장 변수 */
+	String Address_2 = null; /* 관광지 주소2 저장 변수 */
+	String Title = null; /* 관광지 이름 저장 변수 */
+	String Image = null; /* 관광지 이미지 저장 변수 */
+	String Overview = null; /* 관광지 상세 정보 저장 변수 */
+	String Longitude = null; /* 경도 관련 저장 변수 */
+	String Latitude = null; /* 위도 관련 저장 변수 */
+		
+	/* 상세 페이지 상세정보 XML 저장을 변수 */
+	String Information = null; /* 문의 및 안내 */
+	String Restdate = null; /* 휴무일 */
+	String BabyCar = null; /* 유모차 대여 여부 */
+	String Chkpet = null; /* 애완동물 여부 */
+	String Parking = null; /* 주차장 관련 여부 */
+	String Usetime = null; /* 이용시간 */
+	
+	/* TextView */
+	private TextView[] mTextView = new TextView[8];
+	
+	/* ImageView */
+	private ImageView[] mImageView = new ImageView[4];
+	
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tour_minutely);
+
+        Intent intent=getIntent(); /* 인텐트 객체 생성 */
+        Content_id = intent.getStringExtra("Contentid"); /* 해당 관광지 ID 를 가져오는 구문 */
+        Type_id = intent.getIntExtra("Type_code", 0); /* 해당 관광지 타입 ID를 가져오는 구문 */
+        Area = intent.getStringExtra("Area"); /* 지역 명을 가져오는 구문 */
+        Title = intent.getStringExtra("Title"); /* 타이틀 정보 */
+        
+        StringBuffer result = new StringBuffer(); /* StringBuffer 객체 생성 */
+        result.append(Area); result.append(" 관광 정보");
+        
+        /* ActionBar 관련 구문 */
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setTitle("관광지 상세 정보"); /* 액션바 타이틀 설정 */
+        actionBar.setSubtitle(Title); /* 액션바 서브 타이틀 설정 */
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#a1deff"))); /* ActionBar 색상 변경 */
+    	actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#a1deff")));
+        
+    	startView();
+    	
+    	/* AsyncTask */
+    	kr_GoDataXML[] mKrData = {null, null};
+    	mKrData[0] = new kr_GoDataXML();
+    	mKrData[0].execute("1"); /* 해당 관광지 ID를 통해서 XML에 공통정보를 조회하는 함수 호출 */
+    	mKrData[1] = new kr_GoDataXML();
+    	mKrData[1].execute("2"); /* 해당 관광지 ID를 통해서 XML에 상세정보를 조회하는 함수 호출 */    	
+    	
+    	daum_LocationXML[] mDaum = {null, null};
+    	mDaum[0] = new daum_LocationXML("FD6", 1); /* 음식점 관련 */
+    	mDaum[0].execute(); /* 관광지 주변 음식점 조회 */
+    	mDaum[1] = new daum_LocationXML("AD5", 2); /* 숙소 관련 */
+    	mDaum[1].execute(); /* 관광지 주변 숙소 조회 */
+		
+		/* 장소 관련 이미지 뷰 정의 */
+		mImageView[1].setOnClickListener(new OnClickListener() {
+			@Override /* TODO Auto-generated method stub */
+			public void onClick(View v) 
+			{ 
+				AlertDialog.Builder bulider = new AlertDialog.Builder(mContext); /* Alert 객체 생성 */
+				bulider.setTitle(Title).setMessage("해당 위치로 이동 하시겠습니까?").setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+					@Override /* TODO Auto-generated method stub */
+					public void onClick(DialogInterface dialog, int which) {
+						if( (Latitude!=null) && (Longitude!=null) ) {
+							Intent intent = new Intent(mContext,SubActivity4_map.class);
+							/* 값 전달 인텐트 구문 */
+			    			intent.putExtra("Select_Mode", "tour_minutely"); /* 주변정보와 혼동이 생기지 않도록 해주는 인텐드 값 전달 */
+			    			intent.putExtra("Latitude", Latitude); /* 위도 인텐트 값 전달 */
+			    			intent.putExtra("Longitude", Longitude); /* 경도 인텐트 값 전달 */
+			    			intent.putExtra("Title", Title); /* 이름 값 전달 */ startActivity(intent); } 
+						else if( (Latitude==null) || (Longitude==null) ) { Toast.makeText(getApplicationContext(), "해당 위치가 존재 하지 않아 지도에 표시 할 수가 없습니다.", Toast.LENGTH_SHORT).show(); }
+					}
+				}).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+					@Override /* TODO Auto-generated method stub */
+					public void onClick(DialogInterface dialog, int which) { dialog.cancel(); } }).show();				
+			} });
+		
+		/* 음식점 장소 관련 이미지 뷰 정의 */
+		mImageView[2].setOnClickListener(new OnClickListener()
+        {
+			@Override /* TODO Auto-generated method stub */
+			public void onClick(View v) 
+			{
+				AlertDialog.Builder bulider = new AlertDialog.Builder(mContext); /* Alert 객체 생성 */
+				bulider.setTitle(Title).setMessage("주변 음식점 위치로 이동 하시겠습니까?").setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+					@Override /* TODO Auto-generated method stub */
+					public void onClick(DialogInterface dialog, int which) {
+						if( (Latitude!=null) && (Longitude!=null) ) {
+							Intent intent = new Intent(mContext,SubActivity4_map.class);
+							/* 값 전달 인텐트 구문 */
+			    			intent.putExtra("Select_Mode", "minutely_zoon"); /* 주변정보와 혼동이 생기지 않도록 해주는 인텐드 값 전달 */
+			    			intent.putExtra("Mode", "음식점"); /* 음식점과 숙소를 구별 하는 값 전달 */
+			    			/* 실수형 변수 전달 */
+			    			intent.putExtra("Latitude", Double.valueOf(Latitude).doubleValue()); /* 위도 인텐트 값 전달 */
+			    			intent.putExtra("Longitude", Double.valueOf(Longitude).doubleValue()); /* 경도 인텐트 값 전달 */
+			    			/* 배열 변수 전달 */
+			    			intent.putStringArrayListExtra("MapX", mapX_FA);
+			    			intent.putStringArrayListExtra("MapY", mapY_FA);
+			    			intent.putStringArrayListExtra("TITLE", name_FA);
+			    			startActivity(intent); } 
+						else if( (Latitude==null) || (Longitude==null) ) { Toast.makeText(getApplicationContext(), "해당 위치가 존재 하지 않아 지도에 표시 할 수가 없습니다.", Toast.LENGTH_SHORT).show(); }
+					}
+				}).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+					@Override /* TODO Auto-generated method stub */
+					public void onClick(DialogInterface dialog, int which) { dialog.cancel(); } }).show();
+			} 
+		});
+		
+		/* 숙소 장소 관련 이미지 뷰 정의 */
+		mImageView[3].setOnClickListener(new OnClickListener()
+        {
+			@Override /* TODO Auto-generated method stub */
+			public void onClick(View v) 
+			{
+				AlertDialog.Builder bulider = new AlertDialog.Builder(mContext); /* Alert 객체 생성 */
+				bulider.setTitle(Title).setMessage("주변 숙박시설 위치로 이동 하시겠습니까?").setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+					@Override /* TODO Auto-generated method stub */
+					public void onClick(DialogInterface dialog, int which) {
+						if( (Latitude!=null) && (Longitude!=null) ) {
+							Intent intent = new Intent(mContext, SubActivity4_map.class);
+							/* 값 전달 인텐트 구문 */
+			    			intent.putExtra("Select_Mode", "minutely_zoon"); /* 주변정보와 혼동이 생기지 않도록 해주는 인텐드 값 전달 */
+			    			intent.putExtra("Mode", "숙소"); /* 음식점과 숙소를 구별 하는 값 전달 */
+			    			/* 실수형 변수 전달 */
+			    			intent.putExtra("Latitude", Double.valueOf(Latitude).doubleValue()); /* 위도 인텐트 값 전달 */
+			    			intent.putExtra("Longitude", Double.valueOf(Longitude).doubleValue()); /* 경도 인텐트 값 전달 */
+			    			/* 배열 변수 전달 */
+			    			intent.putStringArrayListExtra("MapX", mapX_LA);
+			    			intent.putStringArrayListExtra("MapY", mapY_LA);
+			    			intent.putStringArrayListExtra("TITLE", name_LA);
+			    			startActivity(intent); } 
+						else if( (Latitude==null) || (Longitude==null) ) { Toast.makeText(getApplicationContext(), "해당 위치가 존재 하지 않아 지도에 표시 할 수가 없습니다.", Toast.LENGTH_SHORT).show(); }
+					}
+				}).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+					@Override /* TODO Auto-generated method stub */
+					public void onClick(DialogInterface dialog, int which) { dialog.cancel(); } }).show();
+			} 
+		});
+	}
+	
+	/* TODO 초기 설정 메소드 */
+	private void startView()
+	{
+		/* TextView 관련 객체 생성 구문 */
+    	mTextView[0] = (TextView)findViewById(R.id.minutely_title_textview); /* minutely_title_textview 객체 생성 - 광광지 이름 */
+    	mTextView[1] = (TextView)findViewById(R.id.minutely_point_textview); /* minutely_point_textview 객체 생성 - 장소 */
+    	mTextView[2] = (TextView)findViewById(R.id.minutely_offday_add); /* minutely_offday_add 객체 생성 - 휴무일 */
+    	mTextView[3] = (TextView)findViewById(R.id.minutely_information_add); /* minutely_information_add 객체 생성 - 문의 밎 안내 */
+    	mTextView[4] = (TextView)findViewById(R.id.minutely_parking_add); /* minutely_parking_add 객체 생성 - 주차 시설 */
+    	mTextView[5] = (TextView)findViewById(R.id.minutely_pat_baby_add); /* minutely_pat_baby_add 객체 생성 - 아기와 애완동물 여부 */
+    	mTextView[6] = (TextView)findViewById(R.id.minutely_usetime_add); /* minutely_usetime_add 객체 생성 - 이용시간 */
+    	mTextView[7] = (TextView)findViewById(R.id.minutely_overview); /* minutely_overview 객체 생성 - 상세설명 */
+		
+		/* ImageView 관련 객체 생성 구문 */
+    	mImageView[0] = (ImageView)findViewById(R.id.minutely_imageview); /* minutely_imageview 객체 생성 - 대표 이미지 */
+    	mImageView[1] = (ImageView)findViewById(R.id.minutely_point_imageview); /* minutely_point_imageview 객체 생성 - 해당 장소 지도 이미지 */
+    	mImageView[2] = (ImageView)findViewById(R.id.minutely_foodzoon); /* minutely_foodzoon 객체 생성 - 해당 장소 음식점 위지 지도 이미지 */
+    	mImageView[3] = (ImageView)findViewById(R.id.minutely_bad); /* minutely_bad 객체 생성 - 해당 장소 숙소 위치 지도 이미지 */
+	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.sub9_minutely, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+	
+	@Override
+	public void onBackPressed()
+	{ finish(); }
+	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+    	/* Action Bar 관련 구문 */
+    	switch (item.getItemId()) {
+    		case(R.id.facebook) : 
+    		{ 
+    			Intent intent = new Intent(mContext, SubActivity10_facebook.class);
+    			intent.putExtra("facebook_minutely", "tour_minutely_mode");
+    			intent.putExtra("facebook_title", Title); /* 제목 */
+    			intent.putExtra("facebook_address", Address_1); /* 주소 */
+    			intent.putExtra("facebook_image", Image); /* 관광지 사진 */
+    			intent.putExtra("facebook_overview", Overview); /* 휴무일 */
+    			startActivity(intent); return true;
+			}
+    		case(R.id.kakaotalk) : 
+    		{ 
+    			kakaotalk kakao = new kakaotalk(mContext, Title, Image, Address_1, Information, Restdate, Parking, Usetime, Parking);
+    			kakao.Festival_Kakao_Talk_write(1); /* 관광지 정보 카카오톡으로 정송 */
+    			return true; 
+    		}
+    		case(R.id.save_icon) : 
+    		{
+    			StringBuffer minutely_url = new StringBuffer(); /* StringBuffer 객체 생성 */
+    			String ext = Environment.getExternalStorageState(); /* 외장 메모리 상태 저장 */
+    			if(ext.equals(Environment.MEDIA_MOUNTED)) { minutely_url.append(Environment.getExternalStorageDirectory().getAbsolutePath()); minutely_url.append("/MyTravel/Minutely/"); } /* 외장 메모리가 존재 하는 경우 외장 메모리 경로 저장 */
+    			else { minutely_url.append(Environment.MEDIA_UNMOUNTED); minutely_url.append("/MyTravel/Minutely/"); } /* 외장 메모리가 없는 경우 내장 메모리 경로 저장 */
+    			
+    			/* 그림 파일을 이미지 파일로 저장 시켜 주는 구문 */
+    			save_Image mSave = new save_Image(minutely_url.toString()); /* Bitmap을 이미지 파일로 저장 */    	
+    			mSave.execute();
+    			return true; 
+    		}
+    		default : { return super.onOptionsItemSelected(item); } } 
+	}
+	
+	/* TODO XML NULL DATA Select 함수 */
+	private void XML_null_select() {
+		/* 공통 정보 관련 내용 */
+		if(Address_2==null) { Address_2=""; } /* 주소 2 */
+		if(Image==null) { Image="http://api.visitkorea.or.kr/static/images/common/noImage.gif"; } /* 대표 이미지 */
+		/* 상세 정보 관련 내용 */
+		if(BabyCar==null) { BabyCar="없음"; } /* 애완동물 여부 */
+		if(Chkpet==null) { Chkpet="불가"; } /* 애완동물 여부 */
+		if(Information==null) { Information="정보 없음"; } /* 안내 및 문의 */
+		if(Parking==null) { Parking="정보 없음"; } /* 주차시설 */
+		if(Restdate==null) { Restdate="연중 무휴"; } /* 쉬는날 */
+		if(Usetime==null) { Usetime="24시간"; } /* 이용시간 */
+	}
+	
+	/* XML AsyncTask 클래스 */
+	class kr_GoDataXML extends AsyncTask<String, Void, String>
+	{
+		/* ProgressDialog */
+		private ProgressDialog Dialog = null;
+		
+		@Override /* 프로세스가 실행되기 전에 실행 되는 부분 - 초기 설정 부분 */
+		protected void onPreExecute() 
+		{
+			/* Dialog 설정 구문 */
+			Dialog = new ProgressDialog(mContext);
+			Dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); /* 원형 프로그래스 다이얼 로그 스타일로 설정 */
+			Dialog.setMessage("잠시만 기다려 주세요.");
+			Dialog.show();
+			super.onPreExecute();
+		}
+		
+		@Override /* AsyncTask 실행 부분 */
+		protected String doInBackground(String... params) 
+		{
+			try
+			{
+				/* Xml pull 파실 객체 생성 */
+				XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+				factory.setNamespaceAware(true);
+				XmlPullParser parser = factory.newPullParser();
+				
+				StringBuffer result = null; /* StringBuffer 객체 생성 */
+				switch(params[0])
+				{
+					case ("1") : /* 공통정보 */
+					{
+						/* StringBuffer 관련 구문 */
+						result = new StringBuffer("http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailCommon?ServiceKey="); /* StringBuffer 객체 생성 */
+						/* API KEY */ result.append(API_KEY.kr_GoDATA_API_KEY); result.append("&contentTypeId="); result.append(Type_id); /* 관광타입 코드  ID 삽입 */
+						result.append("&contentId="); result.append(Content_id); result.append("&MobileOS=AND&MobileApp="); result.append(My_AppName);
+						result.append("&defaultYN=Y&firstImageYN=Y&catcodeYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y&transGuideYN=Y");
+						break;
+					}
+					case ("2") : /* 상제정보 */
+					{
+						/* StringBuffer 관련 구문 */
+						result = new StringBuffer("http://api.visitkorea.or.kr/openapi/service/rest/KorService/detailIntro?ServiceKey="); /* StringBuffer 객체 생성 */
+						/* API KEY */ result.append(API_KEY.kr_GoDATA_API_KEY); result.append("&contentTypeId="); result.append(Type_id); /* 관광타입 코드  ID 삽입 */
+						result.append("&contentId="); result.append(Content_id); result.append("&MobileOS=AND&MobileApp="); result.append(My_AppName); result.append("&introYN=Y");
+						break;
+					}
+				}
+				
+				/* 외부 사이트 연결 관련 구문 */
+				URL url = new URL(result.toString()); /* URL 객체 생성 */ 
+			 	InputStream in = url.openStream(); /* 해당 URL로 연결 */
+				parser.setInput(in, "UTF-8"); /* 외부 사이트 데이터와 인코딩 방식을 설정 */		
+				
+				/* XML 파싱 관련 변수 관련 구문 */
+				int eventType = parser.getEventType(); /* 파싱 이벤트  관련 저장 변수 생성 */
+				boolean isItemTag = false;
+				String tagName = null; /* Tag의 이름을 저장 하는 변수 생성 */
+				
+				/* XML 문서를 읽어 들이는 구문 */
+				while (eventType != XmlPullParser.END_DOCUMENT) 
+				{
+					if(eventType == XmlPullParser.START_TAG) 
+					{
+						tagName = parser.getName();
+						if(tagName.equals("response")) { isItemTag = true; } /* XML channel 시작과 끝부분 */	
+					} 
+					else if (eventType == XmlPullParser.TEXT && isItemTag) 
+					{
+						switch(params[0])
+						{
+							case ("1") : 
+							{
+								if(tagName.equals("addr1")) 
+								{ Address_1 = parser.getText(); /* Log.e("XML - Address_1", parser.getText()); */ } /* 주소1 */
+								if(tagName.equals("addr2")) 
+								{ Address_2 = parser.getText(); /* Log.e("XML - Address_2", parser.getText()); */ } /* 주소2 */
+								if(tagName.equals("firstimage")) 
+								{ Image = parser.getText(); /* Log.e("XML - Image", parser.getText()); */ } /* Image URL */
+								if(tagName.equals("mapx")) 
+								{ Longitude = parser.getText(); /* Log.e("XML - mapx", parser.getText()); */ } /* mapx */
+								if(tagName.equals("mapy")) 
+								{ Latitude = parser.getText(); /* Log.e("XML - mapy", parser.getText()); */ } /* mapy */
+								if(tagName.equals("overview")) 
+								{ Overview = parser.getText(); /* Log.e("XML - Overview", parser.getText()); */ } /* Overview */ 
+								break;
+							}
+							case ("2") :
+							{
+								if(tagName.equals("chkbabycarriage")) 
+								{ BabyCar = parser.getText(); /* Log.e("XML - chkbabycarriage", parser.getText()); */ } /* 유모차 대여 여부 */
+								if(tagName.equals("chkpet")) 
+								{ Chkpet = parser.getText(); /* Log.e("XML - chkpet", parser.getText()); */ } /* 애완동물 여부 */
+								if(tagName.equals("infocenter")) 
+								{ Information = parser.getText(); /* Log.e("XML - Information", parser.getText()); */ } /* 문의 및 안내 */
+								if(tagName.equals("parking")) 
+								{ Parking = parser.getText(); /* Log.e("XML - parking", parser.getText()); */ } /* 주차장 여부 */
+								if(tagName.equals("restdate")) 
+								{ Restdate = parser.getText(); /* Log.e("XML - Restdate", parser.getText()); */ } /* 휴무일 */
+								if(tagName.equals("usetime")) 
+								{ Usetime = parser.getText(); /* Log.e("XML - usetime", parser.getText()); */ } /* 이용시간 */
+								break;
+							}
+						}
+					} 
+					else if (eventType == XmlPullParser.END_TAG) 
+					{ 
+						tagName = parser.getName();
+						if(tagName.equals("response")) { isItemTag = false; }
+					}
+					eventType = parser.next(); /* 다음 XML 객체로 이동 */
+				}
+			} catch (Exception e) { e.printStackTrace(); }
+			return params[0];
+		}
+		
+		@Override
+		protected void onPostExecute(String result)
+		{
+			switch(result)
+			{
+				case ("1") : 
+				{ 
+					Image_loder[] mImage = {null, null};
+					mImage[0] = new Image_loder(mImageView[0], Image);
+					mImage[0].execute(); /* 관광지 사진 다운로드 */
+					
+					/* 지도 이미지를 불러오는 구문 */
+					StringBuffer Google_string = new StringBuffer("http://maps.googleapis.com/maps/api/staticmap?center=");
+	    			Google_string.append(Latitude + "," + Longitude); /* 카메라 이동 위도와 경도 */
+	    			Google_string.append("&zoom=18&size=640x640&scale=2&maptype=roadmap&");
+	    			Google_string.append("markers=color:blue|label:N|");  Google_string.append(Latitude + "," + Longitude); /* 마커 설정 위도와 경도 */
+	    			Google_string.append("%7C11211&sensor=false"); Google_string.append("&key=");
+	    			Google_string.append(API_KEY.Google_Static_Key); /* Google API Key */
+	    			
+	    			imageDownload(Google_string.toString(), mImageView[1]); /* 외부에서 이미지를 다운로드 하는 함수 */	    			
+					XML_null_select(); /* XML에 받은 데이터 중에 NULL 값이 있을 경우 다른 값으로 대처 하는 함수 호출 */
+					break; 
+				}
+				case ("2") : 
+				{  
+					/* StringBuffer 설정 구문 */
+					StringBuffer[] mStrBuf = {null, null};
+					
+					/* mStrBuf[0] - 관광지 주소 */
+					mStrBuf[0] = new StringBuffer(); /* 주소 관련 StringBuffer */
+					mStrBuf[0].append(Address_1); mStrBuf[0].append(Address_2);
+					/* mStrBuf[1] - 유모차 및 애완견 관련 정보 */
+					mStrBuf[1] = new StringBuffer(); /* 유모차 및 애완견 관련 정보 */
+					mStrBuf[1].append(Chkpet); mStrBuf[1].append(" / "); mStrBuf[1].append(BabyCar);
+					
+					/* TextView 관련 설정 구문 */
+					mTextView[0].setText(Title); /* 관광지 이름 설정 */
+					mTextView[1].setText(mStrBuf[0].toString()); /* 장소 설정 */
+					mTextView[2].setText(Html.fromHtml(Restdate)); /* 휴무일 설정 */
+					mTextView[3].setText(Html.fromHtml(Information)); /* 문의 및 안내 */
+					mTextView[4].setText(Html.fromHtml(Parking)); /* 주차 관련 설정 */
+					mTextView[5].setText(Html.fromHtml(mStrBuf[1].toString())); /* 아기와 애완동물 설정 */
+					mTextView[6].setText(Html.fromHtml(Usetime)); /* 이용시간 */
+					mTextView[7].setText(Html.fromHtml(Overview)); /* 상세 설명 설정 */
+					break;
+				}
+			}
+			Dialog.dismiss();
+			super.onPostExecute(result);
+		}
+	}
+	
+	/* TODO Daum 주변 정보 관련 정보 */
+	class daum_LocationXML extends AsyncTask<Void, Void, Void>
+	{
+		/* ProgressDialog */
+		private ProgressDialog Dialog = null;
+		
+		/* String */
+		private String mString = null;
+		/* int */
+		private int mInt = 0;
+		
+		/* 생성자 메소드 */
+		daum_LocationXML(String mString, int mInt)
+		{
+			this.mString = mString;
+			this.mInt = mInt;
+		}
+
+		@Override /* 프로세스가 실행되기 전에 실행 되는 부분 - 초기 설정 부분 */
+		protected void onPreExecute() 
+		{
+			/* Dialog 설정 구문 */
+			Dialog = new ProgressDialog(mContext);
+			Dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); /* 원형 프로그래스 다이얼 로그 스타일로 설정 */
+			Dialog.setMessage("잠시만 기다려 주세요.");
+			Dialog.show();
+			
+			/* ArrayList */
+			name_FA = new ArrayList<String>(10);
+			mapX_FA = new ArrayList<String>(10);
+			mapY_FA = new ArrayList<String>(10);
+			
+			name_LA = new ArrayList<String>(10);
+			mapX_LA = new ArrayList<String>(10);
+			mapY_LA = new ArrayList<String>(10);
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected Void doInBackground(Void... params) 
+		{
+			try {
+				/* Xml pull 파실 객체 생성 */
+				XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+				factory.setNamespaceAware(true);
+				XmlPullParser parser = factory.newPullParser();
+			
+				/* StringBuffer 관련 구문 */
+				StringBuffer result = new StringBuffer("https://apis.daum.net/local/v1/search/category.xml?location="); /* StringBuffer 객체 생성 */
+				result.append(Latitude); result.append(","); result.append(Longitude); /* 위도와 경도 */
+				result.append("&code="); result.append(mString); result.append("&redius=1000");
+				result.append("&apikey="); result.append(API_KEY.Daum_API_KEY); /* Daum API KEY */ 
+						
+				/* 외부 사이트 연결 관련 구문 */
+				URL url = new URL(result.toString()); /* URL 객체 생성 */ 
+			 	InputStream in = url.openStream(); /* 해당 URL로 연결 */
+				parser.setInput(in, "UTF-8"); /* 외부 사이트 데이터와 인코딩 방식을 설정 */		
+				
+			/* XML 파싱 관련 변수 관련 구문 */
+			int eventType = parser.getEventType(); /* 파싱 이벤트  관련 저장 변수 생성 */
+			boolean isItemTag = false;
+			String tagName = null; /* Tag의 이름을 저장 하는 변수 생성 */
+
+			/* XML 문서를 읽어 들이는 구문 */
+			while (eventType != XmlPullParser.END_DOCUMENT) 
+			{
+				if(eventType == XmlPullParser.START_TAG) 
+				{
+					tagName = parser.getName();
+					if(tagName.equals("channel")) { isItemTag = true; } /* XML channel 시작과 끝부분 */
+				} else if (eventType == XmlPullParser.TEXT && isItemTag) 
+				{
+					switch(mInt) 
+					{
+						case (1) :
+						{
+							if(tagName.equals("title"))
+							{ name_FA.add(parser.getText()); /* Log.e("XML - title", parser.getText()); */ } /* 이름 */
+							if(tagName.equals("latitude"))
+							{ mapX_FA.add(parser.getText()); /* Log.e("XML - latitude", parser.getText()); */ } /* 위도 */
+							if(tagName.equals("longitude"))
+							{ mapY_FA.add(parser.getText()); /* Log.e("XML - longitude", parser.getText()); */ } /* 경도 */
+							break;
+						}
+						case (2) :
+						{
+							if(tagName.equals("title"))
+							{ name_LA.add(parser.getText()); /* Log.e("XML - title", parser.getText()); */ } /* 이름 */
+							if(tagName.equals("latitude"))
+							{ mapX_LA.add(parser.getText()); /* Log.e("XML - latitude", parser.getText()); */ } /* 위도 */
+							if(tagName.equals("longitude"))
+							{ mapY_LA.add(parser.getText()); /* Log.e("XML - longitude", parser.getText()); */ } /* 경도 */
+							break;
+						}
+					}
+				} else if (eventType == XmlPullParser.END_TAG) { tagName = parser.getName(); if(tagName.equals("channel")) { isItemTag = false; } }
+				eventType = parser.next(); /* 다음 XML 객체로 이동 */
+			}
+			} catch (Exception e) { Log.e("Daum XML", e.getMessage()); }
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void result)
+		{
+			/* Google map에 대한 StringBuffer 객체 생성 */
+			StringBuffer Google_string = new StringBuffer("http://maps.googleapis.com/maps/api/staticmap?center=");
+			Google_string.append(Latitude + "," + Longitude); /* 카메라 이동 위도와 경도 */
+			Google_string.append("&zoom=16&size=320x320&scale=2&maptype=roadmap&");
+			
+			switch(mInt)
+			{
+				case(1) :
+				{
+					int legth = name_FA.size(); /* ArrayList 변수 사이즈 저장 변수 생성 */
+					for(int count=0; count<legth; count++) 
+					{ 
+						String MapX = mapX_FA.get(count); /* 위도 */
+						String MapY = mapY_FA.get(count); /* 경도 */
+						if( (!MapX.equals("\n")) && (!MapY.equals("\n")) ) {
+							Google_string.append("markers=color:red|label:F|");
+							Google_string.append(MapX + "," + MapY); Google_string.append("&"); /* 마커 설정 위도와 경도 */ }
+					}
+					Google_string.append("%7C11211&sensor=false"); Google_string.append("&key=");
+					Google_string.append(API_KEY.Google_Static_Key); /* Google API Key */ break;
+				}
+				case(2) :
+				{
+					int legth = name_LA.size(); /* ArrayList 변수 사이즈 저장 변수 생성 */
+					for(int count=0; count<legth; count++) 
+					{ 
+						String MapX = mapX_LA.get(count); /* 위도 */
+						String MapY = mapY_LA.get(count); /* 경도 */
+						if( (!MapX.equals("\n")) && (!MapY.equals("\n")) ) {
+							Google_string.append("markers=color:blue|label:L|");
+							Google_string.append(MapX + "," + MapY); Google_string.append("&"); /* 마커 설정 위도와 경도 */ }
+					}
+					Google_string.append("%7C11211&sensor=false"); Google_string.append("&key=");
+					Google_string.append(API_KEY.Google_Static_Key); /* Google API Key */ break;
+				}
+			}
+			try
+			{
+				switch(mInt) /* Bitmap을 이미지 뷰에 변경 */
+				{
+					case (1) : { imageDownload(Google_string.toString(), mImageView[2]); /* 외부에서 이미지를 다운로드 하는 함수 */ break; } /* 음식점 */
+					case (2) : { imageDownload(Google_string.toString(), mImageView[3]); break; } /* 숙소 */
+				}				 
+			}
+			catch(Exception e)
+			{
+				Toast.makeText(mContext, "Google에서 이미지를 지도 이미지를 받아 올 수 없습니다.", Toast.LENGTH_SHORT).show();
+				Log.e("GoogleStaticMap", e.getMessage());
+			}
+			
+			Dialog.dismiss();
+			super.onPostExecute(result);
+		}
+		
+	}
+
+	/* TODO Save_Image 클래스 */
+	class save_Image extends AsyncTask<Void, Void, Void>
+	{
+		/* ProgressDialog */
+		private ProgressDialog Dialog = null;
+		
+		/* String */
+		private String[] mString = {null,null};
+		
+		/* 생성자 메소드 */
+		save_Image(String mString)
+		{
+			this.mString[0] = mString;
+		}
+		
+		 /* TODO File의 이름을 시간과 사용자가 입력 한 결과를 받아서 조합 해주는 함수 */
+		@SuppressWarnings("static-access")
+		private String File_rename() {
+			final Calendar calender = Calendar.getInstance(); /* 캘린더 객체 생성 */
+			
+				/* Calendar 변수 */
+				int YEAR = calender.get(calender.YEAR); /* 년 */
+				int MONTH = calender.get(calender.MONTH); /* 월 */
+				int DAY = calender.get(calender.DAY_OF_MONTH); /* 일 */
+				/* 문자열 합치기 */
+				String Filerename = String.format("%d년 %d월 %d일 %s.JPG", YEAR, MONTH, DAY, Title);
+				return Filerename; /* 리턴 값 전달 */ }
+		
+		/* TODO 2개 이상의 Bitmap을 합쳐 주는 함수  */
+		@SuppressWarnings("deprecation")
+		private Bitmap combineImage(Bitmap first, Bitmap secod, boolean isVerticalMode) {
+			Options option = new Options();
+			option.inDither  = true;
+			option.inPurgeable = true;
+			
+			Bitmap bitmap = null;
+			if(isVerticalMode) { bitmap = Bitmap.createScaledBitmap(first, first.getWidth(), first.getHeight()+secod.getHeight(), true); }
+			else { bitmap = Bitmap.createScaledBitmap(first, first.getWidth()+secod.getWidth(), first.getHeight(), true); }
+			/* isVerticalMode 값이 true 일 경우 세로, isVerticalMode 값이 false 일 경우 가로 */
+			Paint p = new Paint();
+			p.setDither(true);
+			p.setFlags(Paint.ANTI_ALIAS_FLAG);
+			Canvas c = new Canvas(bitmap);
+			c.drawBitmap(first, 0, 0, null);
+			if(isVerticalMode) { c.drawBitmap(secod, 0, first.getHeight(), null); }
+			else { c.drawBitmap(secod, first.getWidth(), 0, null); }
+			
+			first.recycle(); secod.recycle();
+			
+			return bitmap;
+		}
+
+		@Override /* 프로세스가 실행되기 전에 실행 되는 부분 - 초기 설정 부분 */
+		protected void onPreExecute() 
+		{
+			/* Dialog 설정 구문 */
+			Dialog = new ProgressDialog(mContext);
+			Dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); /* 원형 프로그래스 다이얼 로그 스타일로 설정 */
+			Dialog.setMessage("잠시만 기다려 주세요.");
+			Dialog.show();
+			
+			mString[1] = File_rename(); /* File의 이름을 시간과 사용자가 입력 한 결과를 받아서 조합 해주는 함수 */
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected Void doInBackground(Void... params) 
+		{
+			/* RelativeLayout 레이아웃 객체 생성 */
+			RelativeLayout[] mRelativeLayout = {null, null};
+			
+			/* mRelativeLayout[0] */
+			mRelativeLayout[0] = (RelativeLayout)findViewById(R.id.minutely_total); /* photo_relative - RelativeLayout 객체 생성 */
+			mRelativeLayout[0].setDrawingCacheEnabled(true); /* photo_relative - RelativeLayout 객체 생성 */
+			mRelativeLayout[0].buildDrawingCache(true); /* photo_relative - RelativeLayout 객체 생성 */
+			/* mRelativeLayout[1] */
+			mRelativeLayout[1] = (RelativeLayout)findViewById(R.id.minutely_scrollView_below); /* minutely_scrollView_below_relative - RelativewLayout 객체 생성 */
+			mRelativeLayout[1].setDrawingCacheEnabled(true); /* photo_relative - RelativeLayout 객체 생성 */
+			mRelativeLayout[1].buildDrawingCache(true); /* photo_relative - RelativeLayout 객체 생성 */
+			
+			Bitmap[] mBitmap = {null, null, null}; /* Bitmap 객체 생성 */
+			mBitmap[0] = Bitmap.createBitmap(mRelativeLayout[0].getMeasuredWidth(), mRelativeLayout[0].getMeasuredHeight(), Bitmap.Config.ARGB_8888); /* mRelativeLayout[0] 에 대한 가로 값과 높이 값을 저장 하고 Bitmap에 대한 투명도를 지정한다  */
+			mBitmap[1] = Bitmap.createBitmap(mRelativeLayout[1].getMeasuredWidth(), mRelativeLayout[1].getMeasuredHeight(), Bitmap.Config.ARGB_8888); /* mRelativeLayout[1] 에 대한 가로 값과 높이 값을 저장 하고 Bitmap에 대한 투명도를 지정한다  */
+			
+			Canvas[] mCanvas = {null, null}; /* Canvas 객체 생성 */
+			mCanvas[0] = new Canvas(mBitmap[0]); /* 캔버스 객체 생성 - Bitmap에 대한 mCanvas[0] 이미지 정보를 캔버스에 저장 */
+			mRelativeLayout[0].draw(mCanvas[0]); /* mRelativeLayout[0] 에 대한 이미지를 그려준다. */
+			
+			mCanvas[1] = new Canvas(mBitmap[1]); /* 캔버스 객체 생성 - Bitmap에 대한 mCanvas[1] 이미지 정보를 캔버스에 저장 */
+			mRelativeLayout[1].draw(mCanvas[1]); /* mRelativeLayout[1] 에 대한 이미지를 그려준다. */
+			
+			mBitmap[2] = combineImage(mBitmap[0], mBitmap[1], true); /* 두개의 합 쳐진 이미지를 저장 하는 Bitmap 공간 */
+			
+			/* 파일 변수 생성 및  경로를 저장 */
+			File imagePath = new File(mString[0]);
+			
+			if(!imagePath.exists()) { imagePath.mkdirs(); }
+			
+			File fileCacheItem = new File(mString[0] + mString[1]);
+			fileCacheItem.getAbsolutePath(); /* 해당 파일이 저장 되어 있는 경로를 저장 */
+			OutputStream out = null;
+			try { /* 정상적으로 저장이 되었을 경우 */ 
+				fileCacheItem.createNewFile();
+				out = new FileOutputStream(fileCacheItem);
+				mBitmap[2].compress(CompressFormat.JPEG, 100, out); 
+			} 
+			catch (FileNotFoundException e) 
+			{ 
+				Toast.makeText(mContext, "저장위치의 문제가 발생하였거나 용량이 부족합니다.", Toast.LENGTH_SHORT).show();
+				e.printStackTrace();
+				Log.e("GREC", e.getMessage()); 
+			} 
+			catch (IOException e) 
+			{ 
+				Toast.makeText(mContext, "내장/외장메모리의 위치를 찾을 수가 없습니다.", Toast.LENGTH_SHORT).show();
+				e.printStackTrace();
+				Log.e("GREC", e.getMessage()); 
+			}
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void result)
+		{
+			Toast.makeText(mContext, "정상적으로 저장이 완료되었습니다.", Toast.LENGTH_SHORT).show(); /* 정상적으로 저장이 완료 되었을 경우 */
+			Dialog.dismiss();
+			super.onPostExecute(result);
+		}	
+	}
+}

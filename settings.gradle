@@ -1,0 +1,7 @@
+include ':HelloFacebookSample'
+include ':Study'
+include ':FacebookSDK'
+include ':sdk'
+include ':MyTravelNote'
+include ':google-play-services_lib'
+include ':appcompat_v7'

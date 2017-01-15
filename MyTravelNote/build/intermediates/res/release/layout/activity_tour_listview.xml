@@ -1,0 +1,87 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tour_liatview_total_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+	<!-- Listview Basic Layout -->
+   <LinearLayout
+        android:id="@+id/tour_listview_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/image_border"
+        android:layout_margin="0.5dp"
+        android:orientation="vertical" >
+    <!-- 사진 및 버튼 관련 레이아웃 -->
+    <RelativeLayout
+        android:id="@+id/tour_photo_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <!-- 사진 -->
+        <ImageView
+            android:id="@+id/tour_listview_photo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:scaleType="fitXY"
+            android:contentDescription="@string/tour_image"
+            android:src="@drawable/abc_ab_share_pack_holo_light" />
+		<!-- 위치 버튼 -->
+        <Button
+            android:id="@+id/tour_listview_point"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/inforamtinon_point_but" />
+		<!-- 전화 버튼 -->
+        <Button
+            android:id="@+id/tour_listview_call"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tour_listview_point"
+            android:background="@drawable/inforamtinon_call_but" />
+        <!-- 관광지명 -->
+        <TextView
+            android:id="@+id/tour_listview_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tour_listview_photo"
+            android:textColor="#22741C"
+            android:textStyle="bold"
+            android:text="@string/tour_title" />
+    </RelativeLayout>
+	<!-- 주소 관련 레이아웃 -->
+    <RelativeLayout
+        android:id="@+id/tour_listview_address_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp" >
+		<!-- 관광지 주소 -->
+        <TextView
+            android:id="@+id/tour_listview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textColor="#000000"
+            android:text="@string/tour_point" />
+        <!-- 남은거리 -->
+        <TextView
+            android:id="@+id/tour_listview_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_alignParentRight="true"
+            android:textColor="#0100FF"
+            android:textStyle="bold"
+            android:text="@string/tour_distance" />
+    </RelativeLayout>
+    </LinearLayout>
+</LinearLayout><!-- From: file:/C:/Users/Mari/Project/MyTravelNote/res/layout/activity_tour_listview.xml -->

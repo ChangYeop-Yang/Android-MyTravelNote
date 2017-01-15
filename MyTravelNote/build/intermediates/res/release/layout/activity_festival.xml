@@ -1,0 +1,95 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/festival_listview_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+	<!-- 행사 정보 출력 -->
+    <TextView
+        android:id="@+id/festival_information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#a1deff"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:text="@string/festival_inforamtion" />
+	<!-- Spiner 추가 되는 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/festival_spinner_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal" >
+		<!-- 특별시/광역시/도 관련 스피너 -->
+        <Spinner
+            android:id="@+id/festival_adminarea_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+		<!-- 시/구/군 관련 스피너 -->
+        <Spinner
+            android:id="@+id/festival_area_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+        <!-- 검색 관련 버튼 -->
+        <Button
+            android:id="@+id/festival_find_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/tour_but" />
+    </LinearLayout>
+	<!-- 레이아웃과 목록 전환 버튼이 있는 레이아웃 -->
+    <RelativeLayout
+        android:id="@+id/festival_bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+		<!-- 리스트뷰가 있는 레이아웃 -->
+        <LinearLayout
+            android:id="@+id/festival_listview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/festival_button_layout"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical" >
+			<!-- 행사 관련 정보가 보여질 리스트 뷰 -->
+            <ListView
+                android:id="@+id/festival_listView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+            </ListView>
+        </LinearLayout>
+		 <!-- 목록 전환 버튼이 있는 레이아웃 -->
+        <LinearLayout
+           	android:id="@+id/festival_button_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal" >
+            <!-- 이전 버튼 -->
+            <Button
+                android:id="@+id/festival_back"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/festival_back" />
+			<!-- 다음 버튼 -->
+            <Button
+                android:id="@+id/festival_next"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/festival_next" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout><!-- From: file:/C:/Users/Mari/Project/MyTravelNote/res/layout/activity_festival.xml -->

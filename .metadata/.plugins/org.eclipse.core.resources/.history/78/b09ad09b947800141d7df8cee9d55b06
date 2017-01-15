@@ -1,0 +1,124 @@
+package kr.example.mytravelnote;
+
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.os.Bundle;
+import android.os.Vibrator;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
+
+public class SubActivity2_notebook extends ActionBarActivity {
+	
+	/* SQLite 관련 변수 */
+	protected dbHelper helper;
+	protected SQLiteDatabase DataBase;
+
+	/* TODO SQLite 체크 관련 함수 */
+	@SuppressWarnings("deprecation")
+	protected void SQLlite_check() {
+		/* dbHelper 객체 생성 */
+		helper = new dbHelper(this);
+
+		/* 읽기/쓰기 모드로 데이터베이스를 오픈 */
+		try { DataBase = helper.getWritableDatabase(); /* 일기/쓰기 가 가능한 데이터베이스  */
+			/* Query */
+			String Query1 = "SELECT * FROM photo_db ORDER BY title ASC";
+			/* 커서 객체 생성 및 쿼리문 저장 */
+			final Cursor cursor = DataBase.rawQuery(Query1, null);
+			startManagingCursor(cursor); /* 액티비티의 생애주기를 커서의 생애주기를 일치시켜 주는 구문 */
+			/* */
+			String[] from = { "title", "point" };
+			int[] to = { android.R.id.text1, android.R.id.text2 };
+			
+			SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, cursor, from, to);
+			ListView list = (ListView) findViewById(R.id.data_list);
+			list.setAdapter(adapter);
+			/* ListView Item이 선택이 되었을 경우에 출력 */
+			list.setOnItemClickListener(new OnItemClickListener(){
+				@Override /* TODO Auto-generated method stub */
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) 
+				{ 
+					Toast.makeText(getApplicationContext(), cursor.getString(1), Toast.LENGTH_SHORT).show(); /* 토스트 기능으로 해당 아이템을 클릭 시 제목을 출력 */
+					Vidrator(); /* 기기 진동 관련 함수 호출 */
+					Intent intent = new Intent(SubActivity2_notebook.this,SubActivity6_gallery.class); /* 인텐트 객체 생성 */
+	    			intent.putExtra("path", cursor.getString(6)); /* 인텐트에 결과 값을 전달 (path - 경로) */
+	    			intent.putExtra("code", cursor.getString(0)); /* 인텐트에 결과 값을 전달 (path - 번호) */
+	    			startActivity(intent); /* 인텐트 시작 */
+	    			cursor.close();
+				} });
+		}
+		/* 읽기 전용 모드로 데이터베이스를 오픈 */
+		catch(SQLiteException ex) { DataBase = helper.getReadableDatabase(); Toast.makeText(getApplicationContext(), "SQLite 문제가 발생 하였습니다.", Toast.LENGTH_SHORT).show(); }
+	}
+
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_notebook);
+        
+        SQLlite_check(); /* SQLite 체크 관련 함수  */
+        
+        /* Action Bar 관련 구문 */
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("여행일기"); /* ActionBar Title TEXT */
+        actionBar.setSubtitle("Note"); /* ActionBar Sub Title TEXT */
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.sub2_notebook, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        
+    	/* TODO Action Bar 관련 구문 */
+    	switch (item.getItemId()) {
+		case(R.id.action_settings): 
+		{ 
+			Toast.makeText(this, "설정", Toast.LENGTH_SHORT).show(); 
+			Intent intent = new Intent(SubActivity2_notebook.this,SubActivity3_setting.class);
+			startActivity(intent);
+			return true; 
+		} // 설정화면 이동
+		case(R.id.action_camara) : 
+		{ 
+			return true; 
+		} // 촬영화면 이동
+		case(R.id.action_home) : 
+		{ 
+			Toast.makeText(this, "홈", Toast.LENGTH_SHORT).show(); 
+			Intent intent = new Intent(SubActivity2_notebook.this,MainActivity.class);
+			startActivity(intent);
+			return true; 
+		} // 홈화면 이동
+		case(R.id.action_back) : { finish(); } // 뒤로가기
+		default : { return super.onOptionsItemSelected(item); }
+	}
+        
+    }
+    
+	/* TODO 기기 진동 관련 함수 */
+	private void Vidrator() {
+		Vibrator tvibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE); /* Vibrator 객체 생성 */
+		long[] vibratePattern = {100, 100, 300};
+		tvibrator.vibrate(300);
+		tvibrator.vibrate(vibratePattern, -1); }
+}

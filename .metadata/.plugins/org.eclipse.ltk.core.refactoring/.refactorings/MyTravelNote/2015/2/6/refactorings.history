@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;MyTravelNote/src/kr/example/mytravelnote/region/area_region.java&apos; to &apos;Area_region.java&apos;" description="Rename resource &apos;area_region.java&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/kr/example/mytravelnote/region/area_region.java" name="Area_region.java" stamp="1423317214335" updateReferences="true"/>
+</session>

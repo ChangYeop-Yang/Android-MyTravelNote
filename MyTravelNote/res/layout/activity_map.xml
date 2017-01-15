@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+	<!-- Daum Map을 띄워주는 지도 부분 -->
+    <RelativeLayout
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </RelativeLayout>
+	    <!-- Location Button -->
+    	<Button
+        android:id="@+id/location_button"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/map_geocoding_layout"
+        android:background="@drawable/map_location_but"/>
+		<!-- Food button -->
+        <Button
+            android:id="@+id/food_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="#00000000"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/map_geocoding_layout"
+            android:drawableTop="@drawable/ic_foodzoon"
+            android:text="@string/map_foodzoon" />
+		<!-- bad Button -->
+        <Button
+            android:id="@+id/lodging_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/food_button"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/food_button"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="5dp"
+            android:background="#00000000"
+            android:drawableTop="@drawable/ic_lodging"
+            android:text="@string/map_lodging" />
+        <!-- oli Button -->
+        <Button
+            android:id="@+id/oli_button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/food_button"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/lodging_button"
+            android:layout_marginRight="5dp"
+            android:background="#00000000"
+            android:drawableTop="@drawable/ic_oil"
+            android:text="@string/map_oil" />
+        <RelativeLayout
+            android:id="@+id/map_geocoding_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:background="#a1deff" >
+
+            <ImageView
+                android:id="@+id/weather_imgview"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="5dp"
+                android:contentDescription="@string/map_weather"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/weather_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+        		android:textColor="#ffffff"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@+id/weather_imgview"
+                android:text="@string/map_weather_text"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/point_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+      			android:textColor="#ffffff"
+                android:layout_toRightOf="@+id/weather_textview"
+                android:text="@string/map_setting"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold" />
+        </RelativeLayout>
+         <!-- AdView -->
+         <net.daum.adam.publisher.AdView
+                android:id="@+id/adview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+            	android:layout_gravity="bottom"
+                android:visibility="invisible"/>
+</RelativeLayout>

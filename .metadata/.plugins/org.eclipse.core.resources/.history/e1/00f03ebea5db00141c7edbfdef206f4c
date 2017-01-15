@@ -1,0 +1,89 @@
+import java.util.Scanner;
+
+class Sync
+{
+	/* int */
+	int[] INum = {0, 0, 0, 0, 0};
+	boolean mBoolean = false;
+	
+	public void setArray()
+	{
+		mBoolean = true;
+		synchronized(this) { notifyAll(); }
+		return;
+	}
+	
+	public void getArray()
+	{
+		if(mBoolean == false) 
+		{
+			try
+			{ synchronized(this) { wait(); } }
+			catch(InterruptedException e) { e.printStackTrace(); }
+		}
+		return;
+	}
+}
+
+/* 사용자에 값을 입력 받는 클레스 */
+class SetArray extends Thread
+{	
+	private Sync mSync;
+	
+	/* Scanner */
+	private final Scanner mScanner; /* Scanner 인스턴스 생성 */
+	
+	private SetArray(Sync mSync) 
+	{
+		this.mSync = mSync;
+		mScanner = new Scanner(System.in);
+		ArrayDataIn();
+	}
+	
+	private void ArrayDataIn() 
+	{
+		for(int temp = 0; temp<mSync.INum.length; temp++) { mSync.INum[temp] = mScanner.nextInt(); }
+		return;
+	}
+}
+
+/* 사용자에 값을 입력 받은 후 합을 구하는 클래스 */
+class GetArray extends Thread
+{
+	private Sync mSync;
+	
+	private GetArray(Sync mSync)
+	{
+		this.mSync = mSync;
+		ArraySum();
+	}
+	
+	private void ArraySum()
+	{
+		int temporary = 0;
+		
+		for(int temp = 0; temp < mSync.INum.length; temp++) { temporary += mSync.INum[temp]; }
+		
+		System.out.print(temporary); return;
+	}
+}
+
+public class Test
+{
+	public static void main(String[] args)
+	{
+		/* int */
+		int[] mNum = {0, 0, 0, 0, 0};
+		
+		final Scanner mScanner = new Scanner(System.in); /* Scanner 인스턴스 생성 */
+		
+		for(int temp = 0; temp<mNum.length; temp++)
+		{ mNum[temp] = mScanner.nextInt(); }
+		
+		Sum mSum = new Sum(mNum); /* Sum 인스턴스 생성 */
+		
+		System.out.print(mSum.Sum_Result());
+		
+		return;
+	}
+}

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dl_activity_main_drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+    <FrameLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fl_activity_main_container">
+    <!-- 기본 레이아웃 -->
+    <LinearLayout
+    android:id="@+id/total_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff"
+    android:baselineAligned="false" >
+    <!-- 왼쪽 관련 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/Left_layout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1.00"
+        android:orientation="vertical" >
+        <!-- 날씨 정보 레이아웃 -->
+        <LinearLayout
+            android:id="@+id/weather_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+            <!-- 날씨 아이콘 관련 이미지뷰 -->
+            <ImageView
+                android:id="@+id/weather_information_imageview"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:contentDescription="@string/home_weather_image"
+                android:scaleType="fitXY"
+                android:src="@drawable/abc_ab_share_pack_holo_light" />
+            <!-- 날씨 관련 텍스트뷰 -->
+            <TextView
+                android:id="@+id/weather_information_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:text="@string/home_weather_text" />
+        </LinearLayout>
+        <!-- 음식점과 숙소 정보 관련 레이아웃 -->
+        <LinearLayout
+            android:id="@+id/information_listview_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+            <!-- 음식점 관련 레이아웃 -->
+            <LinearLayout
+                android:id="@+id/food_zoon_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.00"
+                android:orientation="vertical" >
+                <!-- 음식점 -->
+                <TextView
+                    android:id="@+id/food_information_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffe4af"
+                    android:gravity="center"
+                    android:text="@string/home_food_text" />
+                <!-- 현제 위치 음식점 관련 리트스 뷰 -->
+                <ListView
+                    android:id="@+id/food_place_listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+                </ListView>
+            </LinearLayout>
+            <!-- 슥소 관련 레이아웃 -->
+            <LinearLayout
+                android:id="@+id/lodging_zoon_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.00"
+                android:orientation="vertical" >
+                <!-- 숙소 -->
+                <TextView
+                    android:id="@+id/lodging_information_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffe4af"
+                    android:gravity="center"
+                    android:text="@string/home_lodging_text" />
+                <!-- 현제 위치 숙소 관련 리트스 뷰 -->
+                <ListView
+                    android:id="@+id/lodging_place_listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+                </ListView>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 오른쪽 관련 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/Right_layout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1.00"
+        android:orientation="vertical" >    
+        <!-- 지도 정보 레이아웃 -->
+        <LinearLayout
+            android:id="@+id/map_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.57"
+            android:orientation="vertical" >
+            <!-- 현제위치 -->
+            <TextView
+                android:id="@+id/point_information_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffe4af"
+                android:gravity="center"
+                android:text="@string/home_point_text" />
+            <!-- 현제 위치 지도 이미지뷰 -->
+            <ImageView
+                android:id="@+id/tour_map_imageview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:contentDescription="@string/home_point_image"
+                android:scaleType="fitXY"
+                android:src="@drawable/abc_ab_share_pack_holo_light" />
+        </LinearLayout>
+        <!-- 관광지 정보 레이아웃 -->
+        <LinearLayout
+            android:id="@+id/tour_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.00"
+            android:orientation="vertical"
+            tools:ignore="NestedWeights" >
+            <!-- 관광지 -->
+            <TextView
+                android:id="@+id/tour_information_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffe4af"
+                android:gravity="center"
+                android:text="@string/home_tour_text" />
+            <!-- 관광지 관련 리스트뷰 -->
+            <ListView
+                android:id="@+id/tour_listview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+            </ListView>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+	<!-- 코멘트 -->
+    </FrameLayout>
+
+    <ListView android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:id="@+id/lv_activity_main_nav_list"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:background="#EDEDED"/>
+</android.support.v4.widget.DrawerLayout><!-- From: file:/C:/Users/Mari/Documents/Project/MyTravelNote/res/layout/activity_sliding.xml -->

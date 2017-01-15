@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\Mari\Project\MyTravelNote\libs\libDaumMapEngineApi.jar"
+        jumboMode="false"
+        revision="21.1.0"
+        sha1="a0fae4f6e21fd7f05198ccfba3426db5e3d28e22">
+        <dex dex="C:\Users\Mari\Project\MyTravelNote\build\intermediates\pre-dexed\debug\libDaumMapEngineApi-adce0eeb75e25e0639d6bea8d9f751d4ee921b24.jar" />
+    </item>
+    <item
+        jar="C:\Users\Mari\Project\MyTravelNote\build\intermediates\exploded-aar\Project\FacebookSDK\unspecified\classes.jar"
+        jumboMode="false"
+        revision="21.1.0"
+        sha1="d2b84a593efc24c2218b6ecbc278f8249a954cec">
+        <dex dex="C:\Users\Mari\Project\MyTravelNote\build\intermediates\pre-dexed\debug\classes-41047bfac67f5cfc2af3c41f4d94e53abcb08b93.jar" />
+    </item>
+    <item
+        jar="C:\Users\Mari\Project\MyTravelNote\build\intermediates\exploded-aar\Project\FacebookSDK\unspecified\libs\android-support-v4.jar"
+        jumboMode="false"
+        revision="21.1.0"
+        sha1="3e4e879d0b3dc11f2feb3f55e77e3b5bd82c4a28">
+        <dex dex="C:\Users\Mari\Project\MyTravelNote\build\intermediates\pre-dexed\debug\android-support-v4-79250f24723ae3407d274709178c91a89d18f757.jar" />
+    </item>
+    <item
+        jar="C:\Users\Mari\Project\MyTravelNote\build\intermediates\exploded-aar\Project\google-play-services_lib\unspecified\libs\google-play-services.jar"
+        jumboMode="false"
+        revision="21.1.0"
+        sha1="0f6d5c1ef2e982c3b7858408e3df389cf5d202da">
+        <dex dex="C:\Users\Mari\Project\MyTravelNote\build\intermediates\pre-dexed\debug\google-play-services-7f4cf52945d7427046d671eabcbc45ddfe4ad2cb.jar" />
+    </item>
+    <item
+        jar="C:\Users\Mari\Project\MyTravelNote\build\intermediates\exploded-aar\Project\google-play-services_lib\unspecified\classes.jar"
+        jumboMode="false"
+        revision="21.1.0"
+        sha1="ebb2ec3edeb1c0749f46567cacfaa3446aeadb28">
+        <dex dex="C:\Users\Mari\Project\MyTravelNote\build\intermediates\pre-dexed\debug\classes-467d05e91b4813d4e8a4e7974914be9a0a0cb7d6.jar" />
+    </item>
+    <item
+        jar="C:\Users\Mari\Project\MyTravelNote\build\intermediates\exploded-aar\Project\sdk\unspecified\classes.jar"
+        jumboMode="false"
+        revision="21.1.0"
+        sha1="9273cb19c3775169fe9019211ed866386d3c3394">
+        <dex dex="C:\Users\Mari\Project\MyTravelNote\build\intermediates\pre-dexed\debug\classes-a9eb228bc23ce157f08cd7d262c4026e1479b96e.jar" />
+    </item>
+    <item
+        jar="C:\Users\Mari\Project\MyTravelNote\build\intermediates\exploded-aar\Project\appcompat_v7\unspecified\classes.jar"
+        jumboMode="false"
+        revision="21.1.0"
+        sha1="a495d04ba666bf2464f5709c8259a564b04bf378">
+        <dex dex="C:\Users\Mari\Project\MyTravelNote\build\intermediates\pre-dexed\debug\classes-4aa67d3fcd1f8653b67cae2b6ccc0e6996b5011e.jar" />
+    </item>
+    <item
+        jar="C:\Users\Mari\Project\MyTravelNote\libs\libDaumMapAndroid.jar"
+        jumboMode="false"
+        revision="21.1.0"
+        sha1="91c9de067eff6b3e026d21934e91ec45db8cd277">
+        <dex dex="C:\Users\Mari\Project\MyTravelNote\build\intermediates\pre-dexed\debug\libDaumMapAndroid-a21d5de12b2e29948b9d0cb4882263836eb88906.jar" />
+    </item>
+    <item
+        jar="C:\Users\Mari\Project\MyTravelNote\build\intermediates\exploded-aar\Project\FacebookSDK\unspecified\libs\bolts-android-1.1.2.jar"
+        jumboMode="false"
+        revision="21.1.0"
+        sha1="91c20388c9a45f62b5ed8fe0502bb76ff6251fc7">
+        <dex dex="C:\Users\Mari\Project\MyTravelNote\build\intermediates\pre-dexed\debug\bolts-android-1.1.2-aabc7f5d6928d2d151385112c40ecbe34e99a9d4.jar" />
+    </item>
+    <item
+        jar="C:\Users\Mari\Project\MyTravelNote\libs\AdamPublisherSDK-2.3.4.jar"
+        jumboMode="false"
+        revision="21.1.0"
+        sha1="27b6a1cbbd1a0ca222816c8505013d7afa938dc1">
+        <dex dex="C:\Users\Mari\Project\MyTravelNote\build\intermediates\pre-dexed\debug\AdamPublisherSDK-2.3.4-73282fead90aeed2de539f3720a78abf22433b60.jar" />
+    </item>
+    <item
+        jar="C:\Users\Mari\Project\MyTravelNote\build\intermediates\exploded-aar\Project\appcompat_v7\unspecified\libs\android-support-v7-appcompat.jar"
+        jumboMode="false"
+        revision="21.1.0"
+        sha1="4a3c67dee4051a6bb47c877c6115ba4b1a246afb">
+        <dex dex="C:\Users\Mari\Project\MyTravelNote\build\intermediates\pre-dexed\debug\android-support-v7-appcompat-618704fa8f3bd1f63717a50e5b9b853d5dc017ac.jar" />
+    </item>
+
+</items>

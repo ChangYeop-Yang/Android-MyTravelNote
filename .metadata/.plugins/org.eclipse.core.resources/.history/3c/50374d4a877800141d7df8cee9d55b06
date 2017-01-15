@@ -1,0 +1,160 @@
+package kr.example.mytravelnote;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+public class SubActivity4_map extends Activity {
+	
+	/* Google Map 관련 변수 */
+	private GoogleMap GoogleMap;
+	private int Count = 0;
+	LatLng CenterPoint;
+
+	/* SQLite 관련 변수 */
+	protected dbHelper helper;
+	protected SQLiteDatabase DataBase;
+
+	/* TODO SQLite 체크 관련 함수 */
+	protected void SQLlite_check() {
+		/* dbHelper 객체 생성 */
+		helper = new dbHelper(this); 
+		
+		/* 읽기/쓰기 모드로 데이터베이스를 오픈 */
+		try { DataBase = helper.getWritableDatabase(); }
+		/* 읽기 전용 모드로 데이터베이스를 오픈 */
+		catch(SQLiteException ex) { DataBase = helper.getReadableDatabase(); Toast.makeText(getApplicationContext(), "SQLite 문제가 발생 하였습니다.", Toast.LENGTH_SHORT).show(); }
+	}
+	
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_map);
+        setUpMapIfNeeded(); /* Google Map 초기화 함수 호출 */
+        /* SQLite 체크 관련 함수 호출 */ SQLlite_check();
+        DB_Select();
+    }
+	
+	/* 지도 사용 가능 함수 */
+	private void setUpMapIfNeeded() {
+	/* Google Map 객체가 생성 되지 않은 경우 */
+	if(GoogleMap == null) { GoogleMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+	/* Google Map 객체가 성공적으로 생성되었을 경우 초기화 */
+	if(GoogleMap != null) { GPS_request(); } } }
+	
+	/* TODO GPS 위도와 경도를 찾아주는 함수 */
+	private void GPS_request() {
+		// Acquire a reference to the system Location Manager
+		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+		// Define a listener that responds to location updates
+		LocationListener locationListener = new LocationListener() {
+			
+			/* GPS의 좌표가 바뀔 경우 호출 되는 함수 */
+		    public void onLocationChanged(Location location) {
+		      // Called when a new location is found by the network location provider.
+		      double latitude = location.getLatitude(); /* 위도 */
+		      double longitude= location.getLongitude(); /* 경도 */
+		      
+		      
+		      /* Google Map의 중심점 카메라를 이동 시켜주는 구문 */
+		      if(Count == 0) 
+		      { 
+		    	  CenterPoint = new LatLng(latitude, longitude); /* 위도와 경도를 저장해주는 객체 생성 */
+		    	  GoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(CenterPoint, 15)); Count = 1;
+		      } 
+		      Polylines(CenterPoint, latitude, longitude);
+		    }
+		    
+		    public void onStatusChanged(String provider, int status, Bundle extras) {}
+		    public void onProviderEnabled(String provider) {}
+		    public void onProviderDisabled(String provider) {}
+		  };
+
+		// Register the listener with the Location Manager to receive location updates
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener); }
+	
+	/* TODO DataBase Select 함수 */
+	private void DB_Select() {
+		/* Query */ String Query1 = "SELECT title, score, latitude, longitude FROM photo_db";
+		DataBase.beginTransaction(); /* 트레젝션 실행 */
+		
+		try 
+		{ 
+			/* Cursor 객체 생성 */Cursor point_cursor = DataBase.rawQuery(Query1, null);
+			/* DB를 조회하여서 Maker 함수 호출을 통해서 구글 지도에 마커를 찍어주는 구문 */
+			while(point_cursor.moveToNext()) { Maker(point_cursor.getString(0), point_cursor.getFloat(1), point_cursor.getDouble(2), point_cursor.getDouble(3)); }
+			/*
+			 * point_cursor.getString(0) = title
+			 * point_cursor.getFloat(1) = score
+			 * point_cursor.getDouble(2) = latitude
+			 * point_cursor.getDouble(3) = longitude
+			 */
+			/* 정상적으로 쿼리 문이 수행 되었을 경우 트랜잭션 성공 */ DataBase.setTransactionSuccessful(); 
+		}
+		catch (SQLiteException ex) { ex.printStackTrace(); /* SQLite 오류가 발생 시 토스트 기능 출력 */Toast.makeText(getApplicationContext(), "SQlite DELETE ERROR", Toast.LENGTH_SHORT).show(); }
+        finally { DataBase.endTransaction(); } /* 트랜잭션 종료 */
+	}
+	
+	/* TODO Google Polylines 함수 */
+	private void Polylines(LatLng CenterPoint, double Latitude, double Longitude) {
+		GoogleMap mMap; /* GoogleMap 관련 변수 */
+		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		mMap.addPolyline(new PolylineOptions().add(CenterPoint, new LatLng(Latitude, Longitude)).color(Color.YELLOW));
+	}
+	
+	/* TODO Google Marker 함수 */
+	private void Maker(String title, float score ,double Latitude, double longitude) {
+		GoogleMap mMap; /* GoogleMap 관련 변수 */
+		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		if(score<5.0) { mMap.addMarker(new MarkerOptions().position(new LatLng(Latitude, longitude)).title(title).snippet("자세히")); }
+		else if(score==5.0) { mMap.addMarker(new MarkerOptions().position(new LatLng(Latitude, longitude)).title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).snippet("자세히")); } 
+		
+		/* */
+		mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+			@Override /* TODO Auto-generated method stub */
+			public void onInfoWindowClick(Marker arg0) {
+				AlertDialog alert1 = new AlertDialog.Builder(SubActivity4_map.this).setTitle("title").setMessage("해당 파일로 이동").setPositiveButton("확인",  new DialogInterface.OnClickListener() {		
+					@Override /* TODO Auto-generated method stub */
+					public void onClick(DialogInterface dialog, int which) 
+					{
+						
+					} }).show();
+			}
+		};}
+	}
+	
+	
+	/* Google MyLocation Button */
+	@Override
+	public void onResume() {
+		super.onResume();
+		GoogleMap.setMyLocationEnabled(true); /* Google MyLocation Button 활성화 */
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		GoogleMap.setMyLocationEnabled(false);
+	}
+}

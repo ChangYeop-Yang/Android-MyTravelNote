@@ -1,0 +1,13 @@
+class Sum
+{
+	
+}
+
+public class Test
+{
+	public static void main(String[] args)
+	{
+		private int[5] mNum = {0, 0, 0, 0, 0};
+		return;
+	}
+}

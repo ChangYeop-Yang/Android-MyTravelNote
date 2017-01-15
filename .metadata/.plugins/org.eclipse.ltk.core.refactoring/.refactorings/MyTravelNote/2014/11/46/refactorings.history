@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;MyTravelNote/res/layout/activity_sub_camera.xml&apos; to &apos;activity_sub_photo.xml&apos;" description="Rename resource &apos;activity_sub_camera.xml&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="res/layout/activity_sub_camera.xml" name="activity_sub_photo.xml" stamp="1416042313841" updateReferences="true"/>
+</session>

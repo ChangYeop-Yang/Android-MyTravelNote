@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="net.daum.android.map.openapi.sampleapp"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="9"
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".demos.MapViewDemoActivity"
+            android:label="@string/map_view_demo_title" >
+        </activity>
+        <activity
+            android:name=".demos.MarkerDemoActivity"
+            android:label="@string/marker_demo_title" >
+        </activity>
+        <activity
+            android:name=".demos.PolygonDemoActivity"
+            android:label="@string/polygon_demo_title" >
+        </activity>
+        <activity
+            android:name=".demos.LocationDemoActivity"
+            android:label="@string/location_demo_title" >
+        </activity>
+        <activity
+            android:name=".demos.CameraDemoActivity"
+            android:label="@string/camera_demo_title" >
+        </activity>
+        <activity
+            android:name=".demos.EventsDemoActivity"
+            android:label="@string/events_demo_title" >
+        </activity>
+        <activity
+            android:name=".demos.SearchDemoActivity"
+            android:label="@string/search_demo_title" >
+        </activity>
+    </application>
+
+</manifest>
