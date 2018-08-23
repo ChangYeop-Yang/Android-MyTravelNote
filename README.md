@@ -1,6 +1,8 @@
-# Android-MyTravelNote (Life Style Application) 
+# Android-MyTravelNote - Life Style Application
 
-
+<p align="center">
+  <img src='http://drive.google.com/uc?export=view&id=1Dw1mhILMD5KFNw8I8XJ4v4isKbQPvRDM' /><br>
+</p>
 
 ## ★ Application Outline
 혹시 여행을 좋아하시나요?
