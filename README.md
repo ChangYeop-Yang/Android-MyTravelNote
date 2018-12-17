@@ -1,9 +1,5 @@
 # ■ Android-MyTravelNote - Life Style Application
-
-## ★ Application Outline
-혹시 여행을 좋아하시나요?
-나 혼자서만 알고 있는 비밀의 여행지가 있는데 다른 사람들에게 알리고 싶은 신가요?
-여행지의 사진과 위치를 통해서 주변 친구들이나 가족들에게 알려주세요.
+혹시 여행을 좋아하시나요? 나 혼자서만 알고 있는 비밀의 여행지가 있는데 다른 사람들에게 알리고 싶은 신가요? 여행지의 사진과 위치를 통해서 주변 친구들이나 가족들에게 알려주세요.
 
 ## ★ Application Method
 
@@ -36,7 +32,7 @@
 ## ★ Application Demo play
 
 <p align="center">
-  <img src='http://drive.google.com/uc?export=view&id=1Dw1mhILMD5KFNw8I8XJ4v4isKbQPvRDM' width="750" height="750" /><br>
+  <img src='http://drive.google.com/uc?export=view&id=1Dw1mhILMD5KFNw8I8XJ4v4isKbQPvRDM' width="480" height="750" /><br>
 </p>
 
 ## ★ Reference
