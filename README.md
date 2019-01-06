@@ -32,6 +32,14 @@
 |:----------------:|:----------------:|
 |![](https://user-images.githubusercontent.com/20036523/44517066-a6cc1a80-a701-11e8-83b3-a1148e91e9f1.png)|![](https://user-images.githubusercontent.com/20036523/44517060-a6338400-a701-11e8-8270-d0077350454e.png)|
 
+|:camera: DISPLAY 7|:camera: DISPLAY 8|
+|:----------------:|:----------------:|
+|![](https://user-images.githubusercontent.com/20036523/50732876-580db180-11c6-11e9-9b21-d807225d4295.JPG)|![](https://user-images.githubusercontent.com/20036523/50732879-58a64800-11c6-11e9-9f51-cddb3694f0e1.JPG)|
+
+|:camera: DISPLAY 9|:camera: DISPLAY 10|
+|:----------------:|:-----------------:|
+|![](https://user-images.githubusercontent.com/20036523/50732880-58a64800-11c6-11e9-8dca-1bb7e2a1fd3d.JPG)|![](https://user-images.githubusercontent.com/20036523/50732881-58a64800-11c6-11e9-80cd-ac51c54c68ea.JPG)|
+
 ## ★ Application Demo play
 
 <p align="center">
