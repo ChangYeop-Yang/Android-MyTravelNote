@@ -38,7 +38,7 @@
 
 |:camera: DISPLAY 9|:camera: DISPLAY 10|
 |:----------------:|:-----------------:|
-|![](https://user-images.githubusercontent.com/20036523/50732880-58a64800-11c6-11e9-8dca-1bb7e2a1fd3d.JPG)|![](https://user-images.githubusercontent.com/20036523/50732881-58a64800-11c6-11e9-80cd-ac51c54c68ea.JPG)|
+|![](https://user-images.githubusercontent.com/20036523/50732877-580db180-11c6-11e9-8699-53aeadc916e5.JPG)|![](https://user-images.githubusercontent.com/20036523/50732881-58a64800-11c6-11e9-80cd-ac51c54c68ea.JPG)|
 
 ## ★ Application Demo play
 
